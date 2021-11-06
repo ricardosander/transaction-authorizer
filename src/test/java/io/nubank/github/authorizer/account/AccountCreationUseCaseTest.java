@@ -1,15 +1,23 @@
 package io.nubank.github.authorizer.account;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 class AccountCreationUseCaseTest {
 
+    private AccountCreationUseCase target;
+
+    @BeforeEach
+    void setUp() {
+        target = new AccountCreationUseCase();
+    }
+
     @Test
     void shouldCreateAccount_whenInactiveCardIsGiven() {
 
         AccountCreation request = new AccountCreation(false, 750);
-        AccountCreationResult result = new AccountCreationUseCase().execute(request);
+        AccountCreationResult result = target.execute(request);
 
         assertThat(result).isNotNull();
         assertThat(result.isActiveCard()).isFalse();
@@ -21,7 +29,7 @@ class AccountCreationUseCaseTest {
     void shouldCreateAccount_whenActiveCardIsGiven() {
 
         AccountCreation request = new AccountCreation(true, 175);
-        AccountCreationResult result = new AccountCreationUseCase().execute(request);
+        AccountCreationResult result = target.execute(request);
 
         assertThat(result).isNotNull();
         assertThat(result.isActiveCard()).isTrue();
@@ -32,13 +40,11 @@ class AccountCreationUseCaseTest {
     @Test
     void shouldReturnViolationWhenCreatingAccount_whenAccountIsAlreadyCreated() {
 
-        AccountCreationUseCase accountCreationUseCase = new AccountCreationUseCase();
-
         AccountCreation firstRequest = new AccountCreation(true, 175);
-        accountCreationUseCase.execute(firstRequest);
+        target.execute(firstRequest);
 
         AccountCreation secondRequest = new AccountCreation(true, 350);
-        AccountCreationResult result = accountCreationUseCase.execute(secondRequest);
+        AccountCreationResult result = target.execute(secondRequest);
 
         assertThat(result).isNotNull();
         assertThat(result.isActiveCard()).isTrue();
@@ -51,13 +57,11 @@ class AccountCreationUseCaseTest {
     @Test
     void shouldReturnViolationOnAllCreatingAccount_whenAccountIsAlreadyCreated() {
 
-        AccountCreationUseCase accountCreationUseCase = new AccountCreationUseCase();
-
         AccountCreation firstRequest = new AccountCreation(true, 175);
-        accountCreationUseCase.execute(firstRequest);
+        target.execute(firstRequest);
 
         AccountCreation secondRequest = new AccountCreation(true, 350);
-        AccountCreationResult secondResult = accountCreationUseCase.execute(secondRequest);
+        AccountCreationResult secondResult = target.execute(secondRequest);
 
         assertThat(secondResult).isNotNull();
         assertThat(secondResult.isActiveCard()).isTrue();
@@ -67,7 +71,7 @@ class AccountCreationUseCaseTest {
         assertThat(secondResult.getViolations()).contains("account-already-initialized");
 
         AccountCreation thirdRequest = new AccountCreation(false, 500);
-        AccountCreationResult thirdResult = accountCreationUseCase.execute(thirdRequest);
+        AccountCreationResult thirdResult = target.execute(thirdRequest);
 
         assertThat(thirdResult).isNotNull();
         assertThat(thirdResult.isActiveCard()).isFalse();
