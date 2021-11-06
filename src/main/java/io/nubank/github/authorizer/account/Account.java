@@ -22,7 +22,11 @@ public class Account {
         return new Account(activeCard, availableLimit);
     }
 
-    public void withdraw(int amount) {
+    public boolean withdraw(int amount) {
+        if (amount > availableLimit) {
+            return false;
+        }
         availableLimit -= amount;
+        return true;
     }
 }

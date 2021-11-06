@@ -26,7 +26,10 @@ class TransactionCreationUseCase {
             return new TransactionCreationResult(account, List.of("card-not-active"));
         }
 
-        account.withdraw(request.getAmount());
+        boolean fail = !account.withdraw(request.getAmount());
+        if (fail) {
+            return new TransactionCreationResult(account, List.of("insufficient-limit"));
+        }
 
         return new TransactionCreationResult(account);
     }

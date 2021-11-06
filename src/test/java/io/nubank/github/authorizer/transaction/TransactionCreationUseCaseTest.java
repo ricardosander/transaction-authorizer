@@ -65,4 +65,24 @@ class TransactionCreationUseCaseTest {
         assertThat(result.getViolations().size()).isEqualTo(1);
         assertThat(result.getViolations()).contains("card-not-active");
     }
+
+    @Test
+    void shouldReturnViolation_whenAccountHasInsufficientLimit() {
+
+        AccountCreation accountCreation = new AccountCreation(true, 1000);
+        Account account = (new AccountCreationUseCase().execute(accountCreation)).getState();
+        TransactionCreationUseCase target = new TransactionCreationUseCase(account);
+
+        LocalDateTime time = LocalDateTime.parse("2019-02-13T11:00:00.000");
+        TransactionCreation transaction = new TransactionCreation("Vivara", 1250, time);
+
+        TransactionCreationResult result = target.execute(transaction);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getState()).isNotEmpty();
+        assertThat(result.getState().get().getAvailableLimit()).isEqualTo(1000);
+        assertThat(result.getViolations()).isNotEmpty();
+        assertThat(result.getViolations().size()).isEqualTo(1);
+        assertThat(result.getViolations()).contains("insufficient-limit");
+    }
 }
