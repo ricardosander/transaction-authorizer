@@ -40,11 +40,10 @@ class AccountCreationUseCaseTest {
     @Test
     void shouldReturnViolationWhenCreatingAccount_whenAccountIsAlreadyCreated() {
 
-        AccountCreation firstRequest = new AccountCreation(true, 175);
-        target.execute(firstRequest);
+        target.execute(new AccountCreation(true, 175));
 
-        AccountCreation secondRequest = new AccountCreation(true, 350);
-        AccountCreationResult result = target.execute(secondRequest);
+        AccountCreation request = new AccountCreation(true, 350);
+        AccountCreationResult result = target.execute(request);
 
         assertThat(result).isNotNull();
         assertThat(result.isActiveCard()).isTrue();
@@ -57,8 +56,7 @@ class AccountCreationUseCaseTest {
     @Test
     void shouldReturnViolationOnAllCreatingAccount_whenAccountIsAlreadyCreated() {
 
-        AccountCreation firstRequest = new AccountCreation(true, 175);
-        target.execute(firstRequest);
+        target.execute(new AccountCreation(true, 175));
 
         AccountCreation secondRequest = new AccountCreation(true, 350);
         AccountCreationResult secondResult = target.execute(secondRequest);
