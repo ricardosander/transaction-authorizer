@@ -1,12 +1,24 @@
 package io.nubank.github.authorizer.account;
 
-class Account {
+public class Account {
 
     private final boolean activeCard;
     private final int availableLimit;
 
-    public Account(boolean activeCard, int availableLimit) {
+    Account(boolean activeCard, int availableLimit) {
         this.activeCard = activeCard;
         this.availableLimit = availableLimit;
+    }
+
+    public boolean isActiveCard() {
+        return activeCard;
+    }
+
+    public int getAvailableLimit() {
+        return availableLimit;
+    }
+
+    Account getState() {
+        return new Account(activeCard, availableLimit);
     }
 }

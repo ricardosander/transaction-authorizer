@@ -14,6 +14,6 @@ public class AccountCreationUseCase {
         } else {
             violations.add("account-already-initialized");
         }
-        return new AccountCreationResult(request.isActiveCard(), request.getAvailableLimit(), violations);
+        return new AccountCreationResult(account.getState(), violations);
     }
 }

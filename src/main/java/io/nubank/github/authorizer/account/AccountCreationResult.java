@@ -5,22 +5,16 @@ import java.util.List;
 
 class AccountCreationResult {
 
-    private final boolean activeCard;
-    private final int availableLimit;
+    private final Account account;
     private final List<String> violations;
 
-    AccountCreationResult(boolean activeCard, int availableLimit, List<String> violations) {
-        this.activeCard = activeCard;
-        this.availableLimit = availableLimit;
+    AccountCreationResult(Account account, List<String> violations) {
+        this.account = account;
         this.violations = Collections.unmodifiableList(violations);
     }
 
-    boolean isActiveCard() {
-        return activeCard;
-    }
-
-    int getAvailableLimit() {
-        return availableLimit;
+    public Account getAccount() {
+        return account;
     }
 
     public List<String> getViolations() {
