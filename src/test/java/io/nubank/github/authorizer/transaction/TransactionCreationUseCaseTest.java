@@ -61,7 +61,7 @@ class TransactionCreationUseCaseTest {
 
         assertThat(result).isNotNull();
         assertThat(result.getState()).isNotEmpty();
-        assertThat(result.getState().get().isActiveCard()).isTrue();
+        assertThat(result.getState().get().isActiveCard()).isFalse();
         assertThat(result.getState().get().getAvailableLimit()).isEqualTo(100);
         assertThat(result.getViolations()).isNotEmpty();
         assertThat(result.getViolations().size()).isEqualTo(1);
