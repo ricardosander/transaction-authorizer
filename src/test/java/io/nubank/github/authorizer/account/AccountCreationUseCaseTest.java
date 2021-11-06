@@ -16,4 +16,16 @@ class AccountCreationUseCaseTest {
         assertThat(result.getAvailableLimit()).isEqualTo(750);
         assertThat(result.getViolations()).isEmpty();
     }
+
+    @Test
+    void shouldCreateAccount_whenActiveCardIsGiven() {
+
+        AccountCreation request = new AccountCreation(true, 175);
+        AccountCreationResult result = new AccountCreationUseCase().execute(request);
+
+        assertThat(result).isNotNull();
+        assertThat(result.isActiveCard()).isTrue();
+        assertThat(result.getAvailableLimit()).isEqualTo(175);
+        assertThat(result.getViolations()).isEmpty();
+    }
 }
