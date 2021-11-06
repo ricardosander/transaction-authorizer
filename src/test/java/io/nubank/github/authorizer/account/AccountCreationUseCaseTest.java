@@ -20,8 +20,8 @@ class AccountCreationUseCaseTest {
         AccountCreationResult result = target.execute(request);
 
         assertThat(result).isNotNull();
-        assertThat(result.getAccount().isActiveCard()).isFalse();
-        assertThat(result.getAccount().getAvailableLimit()).isEqualTo(750);
+        assertThat(result.getState().isActiveCard()).isFalse();
+        assertThat(result.getState().getAvailableLimit()).isEqualTo(750);
         assertThat(result.getViolations()).isEmpty();
     }
 
@@ -32,8 +32,8 @@ class AccountCreationUseCaseTest {
         AccountCreationResult result = target.execute(request);
 
         assertThat(result).isNotNull();
-        assertThat(result.getAccount().isActiveCard()).isTrue();
-        assertThat(result.getAccount().getAvailableLimit()).isEqualTo(175);
+        assertThat(result.getState().isActiveCard()).isTrue();
+        assertThat(result.getState().getAvailableLimit()).isEqualTo(175);
         assertThat(result.getViolations()).isEmpty();
     }
 
@@ -46,8 +46,8 @@ class AccountCreationUseCaseTest {
         AccountCreationResult result = target.execute(request);
 
         assertThat(result).isNotNull();
-        assertThat(result.getAccount().isActiveCard()).isTrue();
-        assertThat(result.getAccount().getAvailableLimit()).isEqualTo(350);
+        assertThat(result.getState().isActiveCard()).isTrue();
+        assertThat(result.getState().getAvailableLimit()).isEqualTo(350);
         assertThat(result.getViolations()).isNotEmpty();
         assertThat(result.getViolations().size()).isEqualTo(1);
         assertThat(result.getViolations()).contains("account-already-initialized");
@@ -62,8 +62,8 @@ class AccountCreationUseCaseTest {
         AccountCreationResult secondResult = target.execute(secondRequest);
 
         assertThat(secondResult).isNotNull();
-        assertThat(secondResult.getAccount().isActiveCard()).isFalse();
-        assertThat(secondResult.getAccount().getAvailableLimit()).isEqualTo(500);
+        assertThat(secondResult.getState().isActiveCard()).isFalse();
+        assertThat(secondResult.getState().getAvailableLimit()).isEqualTo(500);
         assertThat(secondResult.getViolations()).isNotEmpty();
         assertThat(secondResult.getViolations().size()).isEqualTo(1);
         assertThat(secondResult.getViolations()).contains("account-already-initialized");
@@ -72,8 +72,8 @@ class AccountCreationUseCaseTest {
         AccountCreationResult thirdResult = target.execute(thirdRequest);
 
         assertThat(thirdResult).isNotNull();
-        assertThat(thirdResult.getAccount().isActiveCard()).isFalse();
-        assertThat(thirdResult.getAccount().getAvailableLimit()).isEqualTo(500);
+        assertThat(thirdResult.getState().isActiveCard()).isFalse();
+        assertThat(thirdResult.getState().getAvailableLimit()).isEqualTo(500);
         assertThat(thirdResult.getViolations()).isNotEmpty();
         assertThat(thirdResult.getViolations().size()).isEqualTo(1);
         assertThat(thirdResult.getViolations()).contains("account-already-initialized");

@@ -5,16 +5,16 @@ import java.util.List;
 
 class AccountCreationResult {
 
-    private final Account account;
+    private final Account state;
     private final List<String> violations;
 
-    AccountCreationResult(Account account, List<String> violations) {
-        this.account = account;
+    AccountCreationResult(Account state, List<String> violations) {
+        this.state = state;
         this.violations = Collections.unmodifiableList(violations);
     }
 
-    public Account getAccount() {
-        return account;
+    public Account getState() {
+        return state;
     }
 
     public List<String> getViolations() {
