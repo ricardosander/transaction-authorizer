@@ -11,6 +11,11 @@ class TransactionCreationResult {
     private final Account state;
     private final List<String> violations;
 
+    TransactionCreationResult(Account state) {
+        this.state = state;
+        this.violations = Collections.emptyList();
+    }
+
     TransactionCreationResult(Account state, List<String> violations) {
         this.state = state;
         this.violations = Collections.unmodifiableList(violations);

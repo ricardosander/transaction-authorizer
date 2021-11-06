@@ -45,4 +45,24 @@ class TransactionCreationUseCaseTest {
         assertThat(result.getState().get().getAvailableLimit()).isEqualTo(80);
         assertThat(result.getViolations()).isEmpty();
     }
+
+    @Test
+    void shouldReturnViolation_whenAccountCardIsInactive() {
+
+        AccountCreation accountCreation = new AccountCreation(false, 100);
+        Account account = (new AccountCreationUseCase().execute(accountCreation)).getState();
+        TransactionCreationUseCase target = new TransactionCreationUseCase(account);
+
+        LocalDateTime time = LocalDateTime.parse("2019-02-13T11:00:00.000");
+        TransactionCreation transaction = new TransactionCreation("Burger King", 20, time);
+
+        TransactionCreationResult result = target.execute(transaction);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getState()).isNotEmpty();
+        assertThat(result.getState().get().getAvailableLimit()).isEqualTo(100);
+        assertThat(result.getViolations()).isNotEmpty();
+        assertThat(result.getViolations().size()).isEqualTo(1);
+        assertThat(result.getViolations()).contains("card-not-active");
+    }
 }
