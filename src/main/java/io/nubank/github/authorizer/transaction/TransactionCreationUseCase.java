@@ -12,10 +12,16 @@ class TransactionCreationUseCase {
         this.account = null;
     }
 
+    public TransactionCreationUseCase(Account account) {
+        this.account = account;
+    }
+
     TransactionCreationResult execute(TransactionCreation request) {
         ArrayList<String> violations = new ArrayList<>();
         if (account == null) {
             violations.add("account-not-initialized");
+        } else {
+            account.withdraw(request.getAmount());
         }
         return new TransactionCreationResult(account, violations);
     }

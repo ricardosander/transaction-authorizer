@@ -3,7 +3,7 @@ package io.nubank.github.authorizer.account;
 import java.util.Collections;
 import java.util.List;
 
-class AccountCreationResult {
+public class AccountCreationResult {
 
     private final Account state;
     private final List<String> violations;
@@ -17,7 +17,7 @@ class AccountCreationResult {
         return state;
     }
 
-    public List<String> getViolations() {
+    List<String> getViolations() {
         return violations;
     }
 }

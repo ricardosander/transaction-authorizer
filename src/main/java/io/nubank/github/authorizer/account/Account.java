@@ -3,7 +3,7 @@ package io.nubank.github.authorizer.account;
 public class Account {
 
     private final boolean activeCard;
-    private final int availableLimit;
+    private int availableLimit;
 
     Account(boolean activeCard, int availableLimit) {
         this.activeCard = activeCard;
@@ -20,5 +20,9 @@ public class Account {
 
     Account getState() {
         return new Account(activeCard, availableLimit);
+    }
+
+    public void withdraw(int amount) {
+        availableLimit -= amount;
     }
 }

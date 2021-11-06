@@ -1,6 +1,6 @@
 package io.nubank.github.authorizer.account;
 
-class AccountCreation {
+public class AccountCreation {
 
     private final boolean activeCard;
     private final int availableLimit;

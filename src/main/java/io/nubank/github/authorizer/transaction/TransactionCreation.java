@@ -13,4 +13,8 @@ class TransactionCreation {
         this.amount = amount;
         this.time = time;
     }
+
+    public int getAmount() {
+        return amount;
+    }
 }
