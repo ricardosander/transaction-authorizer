@@ -42,6 +42,7 @@ class TransactionCreationUseCaseTest {
 
         assertThat(result).isNotNull();
         assertThat(result.getState()).isNotEmpty();
+        assertThat(result.getState().get().isActiveCard()).isTrue();
         assertThat(result.getState().get().getAvailableLimit()).isEqualTo(80);
         assertThat(result.getViolations()).isEmpty();
     }
@@ -60,6 +61,7 @@ class TransactionCreationUseCaseTest {
 
         assertThat(result).isNotNull();
         assertThat(result.getState()).isNotEmpty();
+        assertThat(result.getState().get().isActiveCard()).isTrue();
         assertThat(result.getState().get().getAvailableLimit()).isEqualTo(100);
         assertThat(result.getViolations()).isNotEmpty();
         assertThat(result.getViolations().size()).isEqualTo(1);
@@ -80,6 +82,7 @@ class TransactionCreationUseCaseTest {
 
         assertThat(result).isNotNull();
         assertThat(result.getState()).isNotEmpty();
+        assertThat(result.getState().get().isActiveCard()).isTrue();
         assertThat(result.getState().get().getAvailableLimit()).isEqualTo(1000);
         assertThat(result.getViolations()).isNotEmpty();
         assertThat(result.getViolations().size()).isEqualTo(1);
