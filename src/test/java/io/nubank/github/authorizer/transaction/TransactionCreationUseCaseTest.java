@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TransactionCreationUseCaseTest {
 
     @Test
-    void test() {
+    void shouldReturnViolation_whenAccountIsNotCreated() {
 
         TransactionCreationUseCase target = new TransactionCreationUseCase();
 
