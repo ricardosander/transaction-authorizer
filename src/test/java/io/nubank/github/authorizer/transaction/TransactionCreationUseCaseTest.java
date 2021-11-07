@@ -88,4 +88,76 @@ class TransactionCreationUseCaseTest {
         assertThat(result.getViolations().size()).isEqualTo(1);
         assertThat(result.getViolations()).contains("insufficient-limit");
     }
+
+    @Test
+    void shouldReturnViolation_whenAccountHasInsufficientLimitOnSecondTransaction() {
+
+        AccountCreation accountCreation = new AccountCreation(true, 1000);
+        Account account = (new AccountCreationUseCase().execute(accountCreation)).getState();
+        TransactionCreationUseCase target = new TransactionCreationUseCase(account);
+
+        LocalDateTime time = LocalDateTime.parse("2019-02-13T11:00:00.000");
+        TransactionCreation firstTransaction = new TransactionCreation("Vivara", 250, time);
+
+        TransactionCreationResult firstTransactionResult = target.execute(firstTransaction);
+
+        assertThat(firstTransactionResult).isNotNull();
+        assertThat(firstTransactionResult.getState()).isNotEmpty();
+        assertThat(firstTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(firstTransactionResult.getState().get().getAvailableLimit()).isEqualTo(750);
+        assertThat(firstTransactionResult.getViolations()).isEmpty();
+
+        time = LocalDateTime.parse("2019-02-13T11:00:01.000");
+        TransactionCreation secondTransaction = new TransactionCreation("Samsung", 800, time);
+        TransactionCreationResult secondTransactionResult = target.execute(secondTransaction);
+
+        assertThat(secondTransactionResult).isNotNull();
+        assertThat(secondTransactionResult.getState()).isNotEmpty();
+        assertThat(secondTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(secondTransactionResult.getState().get().getAvailableLimit()).isEqualTo(750);
+        assertThat(secondTransactionResult.getViolations()).isNotEmpty();
+        assertThat(secondTransactionResult.getViolations().size()).isEqualTo(1);
+        assertThat(secondTransactionResult.getViolations()).contains("insufficient-limit");
+    }
+
+    @Test
+    void shouldReturnViolation_whenAccountHasInsufficientLimitOnThirdTransaction() {
+
+        AccountCreation accountCreation = new AccountCreation(true, 1000);
+        Account account = (new AccountCreationUseCase().execute(accountCreation)).getState();
+        TransactionCreationUseCase target = new TransactionCreationUseCase(account);
+
+        LocalDateTime time = LocalDateTime.parse("2019-02-13T11:00:00.000");
+        TransactionCreation firstTransaction = new TransactionCreation("Vivara", 250, time);
+
+        TransactionCreationResult firstTransactionResult = target.execute(firstTransaction);
+
+        assertThat(firstTransactionResult).isNotNull();
+        assertThat(firstTransactionResult.getState()).isNotEmpty();
+        assertThat(firstTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(firstTransactionResult.getState().get().getAvailableLimit()).isEqualTo(750);
+        assertThat(firstTransactionResult.getViolations()).isEmpty();
+
+        time = LocalDateTime.parse("2019-02-13T11:00:01.000");
+        TransactionCreation secondTransaction = new TransactionCreation("Samsung", 500, time);
+        TransactionCreationResult secondTransactionResult = target.execute(secondTransaction);
+
+        assertThat(secondTransactionResult).isNotNull();
+        assertThat(secondTransactionResult.getState()).isNotEmpty();
+        assertThat(secondTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(secondTransactionResult.getState().get().getAvailableLimit()).isEqualTo(250);
+        assertThat(secondTransactionResult.getViolations()).isEmpty();
+
+        time = LocalDateTime.parse("2019-02-13T11:01:01.000");
+        TransactionCreation thirdTransaction = new TransactionCreation("Nike", 800, time);
+        TransactionCreationResult thirdTransactionResult = target.execute(thirdTransaction);
+
+        assertThat(thirdTransactionResult).isNotNull();
+        assertThat(thirdTransactionResult.getState()).isNotEmpty();
+        assertThat(thirdTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(thirdTransactionResult.getState().get().getAvailableLimit()).isEqualTo(250);
+        assertThat(thirdTransactionResult.getViolations()).isNotEmpty();
+        assertThat(thirdTransactionResult.getViolations().size()).isEqualTo(1);
+        assertThat(thirdTransactionResult.getViolations()).contains("insufficient-limit");
+    }
 }
