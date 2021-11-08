@@ -14,6 +14,14 @@ class Transaction {
         this.time = time;
     }
 
+    public String getMerchant() {
+        return merchant;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
     public LocalDateTime getTime() {
         return time;
     }

@@ -221,4 +221,54 @@ class TransactionCreationUseCaseTest {
         assertThat(fifthTransactionResult.getState().get().getAvailableLimit()).isEqualTo(30);
         assertThat(fifthTransactionResult.getViolations()).isEmpty();
     }
+
+    @Test
+    void shouldReturnViolation_whenDoubledTransactionIsDetected() {
+
+        AccountCreation accountCreation = new AccountCreation(true, 100);
+        Account account = (new AccountCreationUseCase().execute(accountCreation)).getState();
+        TransactionCreationUseCase target = new TransactionCreationUseCase(account);
+
+        LocalDateTime time = LocalDateTime.parse("2019-02-13T11:00:00.000");
+        TransactionCreation firstTransaction = new TransactionCreation("Burger King", 20, time);
+
+        TransactionCreationResult firstTransactionResult = target.execute(firstTransaction);
+
+        assertThat(firstTransactionResult).isNotNull();
+        assertThat(firstTransactionResult.getState()).isNotEmpty();
+        assertThat(firstTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(firstTransactionResult.getState().get().getAvailableLimit()).isEqualTo(80);
+        assertThat(firstTransactionResult.getViolations()).isEmpty();
+
+        time = LocalDateTime.parse("2019-02-13T11:00:01.000");
+        TransactionCreation secondTransaction = new TransactionCreation("McDonald's", 10, time);
+        TransactionCreationResult secondTransactionResult = target.execute(secondTransaction);
+
+        assertThat(secondTransactionResult).isNotNull();
+        assertThat(secondTransactionResult.getState()).isNotEmpty();
+        assertThat(secondTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(secondTransactionResult.getState().get().getAvailableLimit()).isEqualTo(70);
+        assertThat(secondTransactionResult.getViolations()).isEmpty();
+
+        time = LocalDateTime.parse("2019-02-13T11:00:02.000");
+        TransactionCreation thirdTransaction = new TransactionCreation("Burger King", 20, time);
+        TransactionCreationResult thirdTransactionResult = target.execute(thirdTransaction);
+
+        assertThat(thirdTransactionResult).isNotNull();
+        assertThat(thirdTransactionResult.getState()).isNotEmpty();
+        assertThat(thirdTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(thirdTransactionResult.getState().get().getAvailableLimit()).isEqualTo(70);
+        assertThat(thirdTransactionResult.getViolations()).isNotEmpty();
+        assertThat(thirdTransactionResult.getViolations()).contains("doubled-transaction");
+
+        time = LocalDateTime.parse("2019-02-13T11:00:03.000");
+        TransactionCreation fourthTransaction = new TransactionCreation("Burger King", 15, time);
+        TransactionCreationResult fourthTransactionResult = target.execute(fourthTransaction);
+
+        assertThat(fourthTransactionResult).isNotNull();
+        assertThat(fourthTransactionResult.getState()).isNotEmpty();
+        assertThat(fourthTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(fourthTransactionResult.getState().get().getAvailableLimit()).isEqualTo(55);
+        assertThat(fourthTransactionResult.getViolations()).isEmpty();
+    }
 }

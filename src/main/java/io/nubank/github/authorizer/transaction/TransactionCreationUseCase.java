@@ -35,6 +35,10 @@ class TransactionCreationUseCase {
             return new TransactionCreationResult(account, List.of("high-frequency-small-interval"));
         }
 
+        if (isDoubledTransaction(request)) {
+            return new TransactionCreationResult(account, List.of("doubled-transaction"));
+        }
+
         boolean fail = !account.withdraw(request.getAmount());
         if (fail) {
             return new TransactionCreationResult(account, List.of("insufficient-limit"));
@@ -50,5 +54,20 @@ class TransactionCreationUseCase {
         }
         LocalDateTime limit = request.getTime().minusMinutes(2);
         return transactions.stream().skip(transactions.size() - 3).allMatch(t -> limit.isBefore(t.getTime()));
+    }
+
+    private boolean isDoubledTransaction(TransactionCreation request) {
+        if (transactions.isEmpty()) {
+            return false;
+        }
+        LocalDateTime limit = request.getTime().minusMinutes(2);
+        return transactions.stream()
+                .anyMatch(transaction -> isDoubleTransaction(request, limit, transaction));
+    }
+
+    private boolean isDoubleTransaction(TransactionCreation request, LocalDateTime limit, Transaction transaction) {
+        return transaction.getMerchant().equals(request.getMerchant())
+                && transaction.getAmount() == request.getAmount()
+                && limit.isBefore(transaction.getTime());
     }
 }
