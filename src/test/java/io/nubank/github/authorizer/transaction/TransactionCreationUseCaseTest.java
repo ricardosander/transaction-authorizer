@@ -160,4 +160,65 @@ class TransactionCreationUseCaseTest {
         assertThat(thirdTransactionResult.getViolations().size()).isEqualTo(1);
         assertThat(thirdTransactionResult.getViolations()).contains("insufficient-limit");
     }
+
+    @Test
+    void shouldReturnViolation_whenHighFrequencySmallIntervalIsDetected() {
+
+        AccountCreation accountCreation = new AccountCreation(true, 100);
+        Account account = (new AccountCreationUseCase().execute(accountCreation)).getState();
+        TransactionCreationUseCase target = new TransactionCreationUseCase(account);
+
+        LocalDateTime time = LocalDateTime.parse("2019-02-13T11:00:00.000");
+        TransactionCreation firstTransaction = new TransactionCreation("Burger King", 20, time);
+
+        TransactionCreationResult firstTransactionResult = target.execute(firstTransaction);
+
+        assertThat(firstTransactionResult).isNotNull();
+        assertThat(firstTransactionResult.getState()).isNotEmpty();
+        assertThat(firstTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(firstTransactionResult.getState().get().getAvailableLimit()).isEqualTo(80);
+        assertThat(firstTransactionResult.getViolations()).isEmpty();
+
+        time = LocalDateTime.parse("2019-02-13T11:00:01.000");
+        TransactionCreation secondTransaction = new TransactionCreation("Habbib's", 20, time);
+        TransactionCreationResult secondTransactionResult = target.execute(secondTransaction);
+
+        assertThat(secondTransactionResult).isNotNull();
+        assertThat(secondTransactionResult.getState()).isNotEmpty();
+        assertThat(secondTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(secondTransactionResult.getState().get().getAvailableLimit()).isEqualTo(60);
+        assertThat(secondTransactionResult.getViolations()).isEmpty();
+
+        time = LocalDateTime.parse("2019-02-13T11:01:01.000");
+        TransactionCreation thirdTransaction = new TransactionCreation("McDonald's", 20, time);
+        TransactionCreationResult thirdTransactionResult = target.execute(thirdTransaction);
+
+        assertThat(thirdTransactionResult).isNotNull();
+        assertThat(thirdTransactionResult.getState()).isNotEmpty();
+        assertThat(thirdTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(thirdTransactionResult.getState().get().getAvailableLimit()).isEqualTo(40);
+        assertThat(thirdTransactionResult.getViolations()).isEmpty();
+
+        time = LocalDateTime.parse("2019-02-13T11:01:31.000");
+        TransactionCreation fourthTransaction = new TransactionCreation("Subway", 20, time);
+        TransactionCreationResult fourthTransactionResult = target.execute(fourthTransaction);
+
+        assertThat(fourthTransactionResult).isNotNull();
+        assertThat(fourthTransactionResult.getState()).isNotEmpty();
+        assertThat(fourthTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(fourthTransactionResult.getState().get().getAvailableLimit()).isEqualTo(40);
+        assertThat(fourthTransactionResult.getViolations()).isNotEmpty();
+        assertThat(fourthTransactionResult.getViolations().size()).isEqualTo(1);
+        assertThat(fourthTransactionResult.getViolations()).contains("high-frequency-small-interval");
+
+        time = LocalDateTime.parse("2019-02-13T12:00:00.000");
+        TransactionCreation fifthTransaction = new TransactionCreation("Burger King", 10, time);
+        TransactionCreationResult fifthTransactionResult = target.execute(fifthTransaction);
+
+        assertThat(fifthTransactionResult).isNotNull();
+        assertThat(fifthTransactionResult.getState()).isNotEmpty();
+        assertThat(fifthTransactionResult.getState().get().isActiveCard()).isTrue();
+        assertThat(fifthTransactionResult.getState().get().getAvailableLimit()).isEqualTo(30);
+        assertThat(fifthTransactionResult.getViolations()).isEmpty();
+    }
 }
