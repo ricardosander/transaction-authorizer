@@ -3,6 +3,7 @@ package io.nubank.github.authorizer.transaction;
 import io.nubank.github.authorizer.account.Account;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,21 +32,25 @@ class TransactionCreationUseCase {
             return new TransactionCreationResult(account, List.of("card-not-active"));
         }
 
+        List<String> violations = new ArrayList<>();
         if (isHighFrequencySmallInterval(request)) {
-            return new TransactionCreationResult(account, List.of("high-frequency-small-interval"));
+            violations.add("high-frequency-small-interval");
         }
 
         if (isDoubledTransaction(request)) {
-            return new TransactionCreationResult(account, List.of("doubled-transaction"));
+            violations.add("doubled-transaction");
         }
 
-        boolean fail = !account.withdraw(request.getAmount());
-        if (fail) {
-            return new TransactionCreationResult(account, List.of("insufficient-limit"));
+        if (request.getAmount() > account.getAvailableLimit()) {
+            violations.add("insufficient-limit");
         }
 
-        transactions.add(new Transaction(request.getMerchant(), request.getAmount(), request.getTime()));
-        return new TransactionCreationResult(account);
+        if (violations.isEmpty()) {
+            account.withdraw(request.getAmount());
+            transactions.add(new Transaction(request.getMerchant(), request.getAmount(), request.getTime()));
+        }
+
+        return new TransactionCreationResult(account, violations);
     }
 
     private boolean isHighFrequencySmallInterval(TransactionCreation request) {
