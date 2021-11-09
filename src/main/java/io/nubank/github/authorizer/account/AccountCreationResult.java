@@ -17,7 +17,7 @@ public class AccountCreationResult {
         return state;
     }
 
-    List<String> getViolations() {
+    public List<String> getViolations() {
         return violations;
     }
 }
