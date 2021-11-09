@@ -62,4 +62,35 @@ class AuthorizerTest {
         assertThat(results.get(1).getViolations().size()).isEqualTo(1);
         assertThat(results.get(1).getViolations()).contains("account-already-initialized");
     }
+
+    @Test
+    void shouldCreateTransactionSuccessfully_whenAccountIsAlreadyCreated() {
+
+        AccountCreation accountCreation = new AccountCreation(true, 100);
+
+        LocalDateTime time = LocalDateTime.parse("2019-02-13T11:00:00.000");
+        TransactionCreation transactionCreation = new TransactionCreation("Burger King", 20, time);
+
+        List<OperationRequest> requests = List.of(accountCreation, transactionCreation);
+
+        Authorizer target = new Authorizer(new AccountRepository());
+        List<OperationResult> results = target.execute(requests);
+
+        assertThat(results)
+                .isNotNull()
+                .isNotEmpty();
+        assertThat(results.size()).isEqualTo(2);
+
+        assertThat(results.get(0)).isNotNull();
+        assertThat(results.get(0).getAccount()).isNotNull();
+        assertThat(results.get(0).getAccount().isActiveCard()).isTrue();
+        assertThat(results.get(0).getAccount().getAvailableLimit()).isEqualTo(100);
+        assertThat(results.get(0).getViolations()).isEmpty();
+
+        assertThat(results.get(1)).isNotNull();
+        assertThat(results.get(1).getAccount()).isNotNull();
+        assertThat(results.get(1).getAccount().isActiveCard()).isTrue();
+        assertThat(results.get(1).getAccount().getAvailableLimit()).isEqualTo(80);
+        assertThat(results.get(1).getViolations()).isEmpty();
+    }
 }
