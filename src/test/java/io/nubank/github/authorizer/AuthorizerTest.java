@@ -69,7 +69,7 @@ class AuthorizerTest {
 
         AccountCreation accountCreation = buildAccountCreation(true, 100);
 
-        LocalDateTime time = LocalDateTime.parse("2019-02-13T11:00:00.000");
+        LocalDateTime time = buildTime("2019-02-13T11:00:00.000");
         TransactionCreation transactionCreation = new TransactionCreation("Burger King", 20, time);
 
         List<OperationRequest> requests = List.of(accountCreation, transactionCreation);
@@ -95,7 +95,7 @@ class AuthorizerTest {
     @Test
     void shouldReturnAccountNotInitializedViolation_whenAccountIsNotCreatedBeforeTransactionCreation() {
 
-        LocalDateTime time = LocalDateTime.parse("2020-12-01T11:07:00.000");
+        LocalDateTime time = buildTime("2020-12-01T11:07:00.000");
         AccountCreation accountCreation = buildAccountCreation(true, 225);
         TransactionCreation transaction = new TransactionCreation("Uber Eats", 25, time);
 
@@ -126,5 +126,9 @@ class AuthorizerTest {
 
     private AccountCreation buildAccountCreation(boolean isCardActive, int availableLimit) {
         return new AccountCreation(isCardActive, availableLimit);
+    }
+
+    private LocalDateTime buildTime(String time) {
+        return LocalDateTime.parse(time);
     }
 }
