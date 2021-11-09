@@ -23,11 +23,11 @@ public class TransactionCreationUseCase {
 
         Account account = accountRepository.getAccount();
         if (account == null) {
-            return new OperationResult(account, List.of("account-not-initialized"));
+            return new OperationResult(null, List.of("account-not-initialized"));
         }
 
         if (!account.isActiveCard()) {
-            return new OperationResult(account, List.of("card-not-active"));
+            return new OperationResult(account.getState(), List.of("card-not-active"));
         }
 
         List<String> violations = new ArrayList<>();
@@ -48,7 +48,7 @@ public class TransactionCreationUseCase {
             transactions.add(new Transaction(request.getMerchant(), request.getAmount(), request.getTime()));
         }
 
-        return new OperationResult(account, violations);
+        return new OperationResult(account.getState(), violations);
     }
 
     private boolean isHighFrequencySmallInterval(TransactionCreation request) {
