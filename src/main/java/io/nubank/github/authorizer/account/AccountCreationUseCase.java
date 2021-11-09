@@ -1,5 +1,6 @@
 package io.nubank.github.authorizer.account;
 
+import io.nubank.github.authorizer.AccountResult;
 import io.nubank.github.authorizer.OperationResult;
 
 import java.util.ArrayList;
@@ -15,11 +16,13 @@ public class AccountCreationUseCase {
     public OperationResult execute(AccountCreation request) {
 
         ArrayList<String> violations = new ArrayList<>();
-        if (repository.getAccount() == null) {
-            repository.setAccount(new Account(request.isActiveCard(), request.getAvailableLimit()));
+        Account account = repository.getAccount();
+        if (account == null) {
+            account = new Account(request.isActiveCard(), request.getAvailableLimit());
+            repository.setAccount(account);
         } else {
             violations.add("account-already-initialized");
         }
-        return new OperationResult(repository.getAccount().getState(), violations);
+        return new OperationResult(AccountResult.createFrom(account), violations);
     }
 }

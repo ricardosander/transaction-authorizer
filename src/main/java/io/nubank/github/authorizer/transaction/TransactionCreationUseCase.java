@@ -1,5 +1,6 @@
 package io.nubank.github.authorizer.transaction;
 
+import io.nubank.github.authorizer.AccountResult;
 import io.nubank.github.authorizer.OperationResult;
 import io.nubank.github.authorizer.account.Account;
 import io.nubank.github.authorizer.account.AccountRepository;
@@ -27,7 +28,7 @@ public class TransactionCreationUseCase {
         }
 
         if (!account.isActiveCard()) {
-            return new OperationResult(account.getState(), List.of("card-not-active"));
+            return new OperationResult(AccountResult.createFrom(account), List.of("card-not-active"));
         }
 
         List<String> violations = new ArrayList<>();
@@ -48,7 +49,7 @@ public class TransactionCreationUseCase {
             transactions.add(new Transaction(request.getMerchant(), request.getAmount(), request.getTime()));
         }
 
-        return new OperationResult(account.getState(), violations);
+        return new OperationResult(AccountResult.createFrom(account), violations);
     }
 
     private boolean isHighFrequencySmallInterval(TransactionCreation request) {

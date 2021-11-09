@@ -7,15 +7,15 @@ import java.util.List;
 
 public class OperationResult {
 
-    private final Account state;
+    private final AccountResult state;
     private final List<String> violations;
 
-    public OperationResult(Account state, List<String> violations) {
+    public OperationResult(AccountResult state, List<String> violations) {
         this.state = state;
         this.violations = Collections.unmodifiableList(violations);
     }
 
-    Account getAccount() {
+    AccountResult getAccount() {
         return state;
     }
 

@@ -18,10 +18,6 @@ public class Account {
         return availableLimit;
     }
 
-    public Account getState() {
-        return new Account(activeCard, availableLimit);
-    }
-
     public boolean withdraw(int amount) {
         if (amount > availableLimit) {
             return false;
