@@ -3,6 +3,7 @@ package io.nubank.github.authorizer;
 import io.nubank.github.authorizer.account.AccountCreation;
 import io.nubank.github.authorizer.account.AccountRepository;
 import io.nubank.github.authorizer.transaction.TransactionCreation;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -12,14 +13,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthorizerTest {
 
+    private Authorizer authorizer;
+
+    @BeforeEach
+    void setUp() {
+        authorizer = new Authorizer(new AccountRepository());
+    }
+
+
     @Test
     void shouldCreateAccountSuccessfully_whenCreateAccountIsTheOnlyOperation() {
 
         AccountCreation accountCreation = new AccountCreation(false, 750);
         List<OperationRequest> requests = List.of(accountCreation);
 
-        Authorizer target = new Authorizer(new AccountRepository());
-        List<OperationResult> results = target.execute(requests);
+        List<OperationResult> results = authorizer.execute(requests);
 
         assertThat(results)
                 .isNotNull()
@@ -35,13 +43,11 @@ class AuthorizerTest {
     @Test
     void shouldReturnViolation_whenCreateAccountButAccountAlreadyExists() {
 
-        Authorizer target = new Authorizer(new AccountRepository());
-
         AccountCreation accountCreation = new AccountCreation(true, 175);
         AccountCreation secondAccountCreation = new AccountCreation(true, 350);
         List<OperationRequest> requests = List.of(accountCreation, secondAccountCreation);
 
-        List<OperationResult> results = target.execute(requests);
+        List<OperationResult> results = authorizer.execute(requests);
 
         assertThat(results)
                 .isNotNull()
@@ -73,8 +79,8 @@ class AuthorizerTest {
 
         List<OperationRequest> requests = List.of(accountCreation, transactionCreation);
 
-        Authorizer target = new Authorizer(new AccountRepository());
-        List<OperationResult> results = target.execute(requests);
+
+        List<OperationResult> results = authorizer.execute(requests);
 
         assertThat(results)
                 .isNotNull()
