@@ -2,7 +2,7 @@ package io.nubank.github.authorizer.transaction;
 
 import java.time.LocalDateTime;
 
-class Transaction {
+public class Transaction {
 
     private final String merchant;
     private final int amount;
@@ -18,7 +18,7 @@ class Transaction {
         return merchant;
     }
 
-    int getAmount() {
+    public int getAmount() {
         return amount;
     }
 
