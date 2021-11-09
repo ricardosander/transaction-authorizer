@@ -40,9 +40,9 @@ class AuthorizerTest {
     @Test
     void shouldReturnViolation_whenCreateAccountButAccountAlreadyExists() {
 
-        AccountCreation account = buildAccountCreation(true, 175);
-        AccountCreation secondAccount = buildAccountCreation(true, 350);
-        List<OperationRequest> requests = List.of(account, secondAccount);
+        AccountCreation account1 = buildAccountCreation(true, 175);
+        AccountCreation account2 = buildAccountCreation(true, 350);
+        List<OperationRequest> requests = List.of(account1, account2);
 
         List<OperationResult> results = authorizer.execute(requests);
 
@@ -122,9 +122,9 @@ class AuthorizerTest {
     void shouldReturnCardNotActiveViolation_whenTryToCreateTransactionAndCardAccountIsInactive() {
 
         AccountCreation account = buildAccountCreation(false, 100);
-        TransactionCreation burgerKing = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
-        TransactionCreation habbibs = buildTransactionCreation("Habbib's", 15, "2019-02-13T11:15:00");
-        List<OperationRequest> requests = List.of(account, burgerKing, habbibs);
+        TransactionCreation transaction1 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
+        TransactionCreation transaction2 = buildTransactionCreation("Habbib's", 15, "2019-02-13T11:15:00");
+        List<OperationRequest> requests = List.of(account, transaction1, transaction2);
 
         List<OperationResult> results = authorizer.execute(requests);
 
@@ -153,10 +153,10 @@ class AuthorizerTest {
     void shouldReturnInsufficientLimitViolation_whenTransactionExceedsAccountLimit() {
 
         AccountCreation account = buildAccountCreation(true, 1000);
-        TransactionCreation vivara = buildTransactionCreation("Vivara", 1250, "2019-02-13T11:00:00");
-        TransactionCreation samsung = buildTransactionCreation("Samsung", 2500, "2019-02-13T11:00:01");
-        TransactionCreation nike = buildTransactionCreation("Nike", 800, "2019-02-13T11:01:01");
-        List<OperationRequest> requests = List.of(account, vivara, samsung, nike);
+        TransactionCreation transaction1 = buildTransactionCreation("Vivara", 1250, "2019-02-13T11:00:00");
+        TransactionCreation transaction2 = buildTransactionCreation("Samsung", 2500, "2019-02-13T11:00:01");
+        TransactionCreation transaction3 = buildTransactionCreation("Nike", 800, "2019-02-13T11:01:01");
+        List<OperationRequest> requests = List.of(account, transaction1, transaction2, transaction3);
 
         List<OperationResult> results = authorizer.execute(requests);
 
@@ -190,12 +190,12 @@ class AuthorizerTest {
     void shouldReturnHighFrequencySmallIntervalViolation_whenFourTransactionAreMadeInLessThenTowMinutes() {
 
         AccountCreation account = buildAccountCreation(true, 100);
-        TransactionCreation burgerKing = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
-        TransactionCreation habbibs = buildTransactionCreation("Habbib's", 20, "2019-02-13T11:00:01");
-        TransactionCreation mcDonalds = buildTransactionCreation("McDonald's", 20, "2019-02-13T11:01:01");
-        TransactionCreation subway = buildTransactionCreation("Subway", 20, "2019-02-13T11:01:31");
-        TransactionCreation burgerKingAgain = buildTransactionCreation("Burger King", 10, "2019-02-13T12:00:00");
-        List<OperationRequest> requests = List.of(account, burgerKing, habbibs, mcDonalds, subway, burgerKingAgain);
+        TransactionCreation transaction1 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
+        TransactionCreation transaction2 = buildTransactionCreation("Habbib's", 20, "2019-02-13T11:00:01");
+        TransactionCreation transaction3 = buildTransactionCreation("McDonald's", 20, "2019-02-13T11:01:01");
+        TransactionCreation transaction4 = buildTransactionCreation("Subway", 20, "2019-02-13T11:01:31");
+        TransactionCreation transaction5 = buildTransactionCreation("Burger King", 10, "2019-02-13T12:00:00");
+        List<OperationRequest> requests = List.of(account, transaction1, transaction2, transaction3, transaction4, transaction5);
 
         List<OperationResult> results = authorizer.execute(requests);
 
@@ -238,11 +238,11 @@ class AuthorizerTest {
     void shouldReturnDoubledTransactionViolation_whenTwoTransactionToSameMerchantAndValueAreMadeInLessThenTwoMinutes() {
 
         AccountCreation account = buildAccountCreation(true, 100);
-        TransactionCreation burgerKing = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
-        TransactionCreation mcDonalds = buildTransactionCreation("McDonald's", 10, "2019-02-13T11:00:01");
-        TransactionCreation doubledBurgerKing = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:02");
-        TransactionCreation otherBurgerKing = buildTransactionCreation("Burger King", 15, "2019-02-13T11:00:03");
-        List<OperationRequest> requests = List.of(account, burgerKing, mcDonalds, doubledBurgerKing, otherBurgerKing);
+        TransactionCreation transaction1 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
+        TransactionCreation transaction2 = buildTransactionCreation("McDonald's", 10, "2019-02-13T11:00:01");
+        TransactionCreation transaction3 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:02");
+        TransactionCreation transaction4 = buildTransactionCreation("Burger King", 15, "2019-02-13T11:00:03");
+        List<OperationRequest> requests = List.of(account, transaction1, transaction2, transaction3, transaction4);
 
         List<OperationResult> results = authorizer.execute(requests);
 
