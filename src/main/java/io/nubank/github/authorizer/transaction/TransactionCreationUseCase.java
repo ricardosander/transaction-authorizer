@@ -1,35 +1,33 @@
 package io.nubank.github.authorizer.transaction;
 
+import io.nubank.github.authorizer.OperationResult;
 import io.nubank.github.authorizer.account.Account;
+import io.nubank.github.authorizer.account.AccountRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-class TransactionCreationUseCase {
+public class TransactionCreationUseCase {
 
-    private final Account account;
+    private final AccountRepository accountRepository;
     private final List<Transaction> transactions;
 
-    TransactionCreationUseCase() {
-        this.account = null;
+    public TransactionCreationUseCase(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
         this.transactions = new LinkedList<>();
     }
 
-    public TransactionCreationUseCase(Account account) {
-        this.account = account;
-        this.transactions = new LinkedList<>();
-    }
+    public OperationResult execute(TransactionCreation request) {
 
-    TransactionCreationResult execute(TransactionCreation request) {
-
+        Account account = accountRepository.getAccount();
         if (account == null) {
-            return new TransactionCreationResult(account, List.of("account-not-initialized"));
+            return new OperationResult(account, List.of("account-not-initialized"));
         }
 
         if (!account.isActiveCard()) {
-            return new TransactionCreationResult(account, List.of("card-not-active"));
+            return new OperationResult(account, List.of("card-not-active"));
         }
 
         List<String> violations = new ArrayList<>();
@@ -50,7 +48,7 @@ class TransactionCreationUseCase {
             transactions.add(new Transaction(request.getMerchant(), request.getAmount(), request.getTime()));
         }
 
-        return new TransactionCreationResult(account, violations);
+        return new OperationResult(account, violations);
     }
 
     private boolean isHighFrequencySmallInterval(TransactionCreation request) {

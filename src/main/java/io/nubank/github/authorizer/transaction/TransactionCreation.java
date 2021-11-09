@@ -1,28 +1,30 @@
 package io.nubank.github.authorizer.transaction;
 
+import io.nubank.github.authorizer.OperationRequest;
+
 import java.time.LocalDateTime;
 
-class TransactionCreation {
+public class TransactionCreation implements OperationRequest {
 
     private final String merchant;
     private final int amount;
     private final LocalDateTime time;
 
-    TransactionCreation(String merchant, int amount, LocalDateTime time) {
+    public TransactionCreation(String merchant, int amount, LocalDateTime time) {
         this.merchant = merchant;
         this.amount = amount;
         this.time = time;
     }
 
-    public int getAmount() {
+    int getAmount() {
         return amount;
     }
 
-    public String getMerchant() {
+    String getMerchant() {
         return merchant;
     }
 
-    public LocalDateTime getTime() {
+    LocalDateTime getTime() {
         return time;
     }
 }
