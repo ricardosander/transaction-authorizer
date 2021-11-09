@@ -118,6 +118,37 @@ class AuthorizerTest {
         assertThat(results.get(2).getViolations()).isEmpty();
     }
 
+    @Test
+    void shouldReturnCardNotActive_whenTryToCreateTransactionAndCardAccountIsInactive() {
+
+        AccountCreation account = buildAccountCreation(false, 100);
+        TransactionCreation burgerKing = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00.000");
+        TransactionCreation habbibs = buildTransactionCreation("Habbib's", 15, "2019-02-13T11:15:00.000");
+        List<OperationRequest> requests = List.of(account, burgerKing, habbibs);
+
+        List<OperationResult> results = authorizer.execute(requests);
+
+        assertThat(results).isNotEmpty();
+        assertThat(results.size()).isEqualTo(3);
+
+        assertThat(results.get(0).getAccount()).isNotNull();
+        assertThat(results.get(0).getAccount().isActiveCard()).isFalse();
+        assertThat(results.get(0).getAccount().getAvailableLimit()).isEqualTo(100);
+        assertThat(results.get(0).getViolations()).isEmpty();
+
+        assertThat(results.get(1).getAccount()).isNotNull();
+        assertThat(results.get(1).getAccount().isActiveCard()).isFalse();
+        assertThat(results.get(1).getAccount().getAvailableLimit()).isEqualTo(100);
+        assertThat(results.get(1).getViolations()).isNotEmpty();
+        assertThat(results.get(1).getViolations()).contains("card-not-active");
+
+        assertThat(results.get(2).getAccount()).isNotNull();
+        assertThat(results.get(2).getAccount().isActiveCard()).isFalse();
+        assertThat(results.get(2).getAccount().getAvailableLimit()).isEqualTo(100);
+        assertThat(results.get(2).getViolations()).isNotEmpty();
+        assertThat(results.get(2).getViolations()).contains("card-not-active");
+    }
+
     private AccountCreation buildAccountCreation(boolean isCardActive, int availableLimit) {
         return new AccountCreation(isCardActive, availableLimit);
     }
