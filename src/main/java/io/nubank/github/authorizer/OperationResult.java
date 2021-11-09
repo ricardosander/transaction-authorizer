@@ -15,11 +15,11 @@ public class OperationResult {
         this.violations = Collections.unmodifiableList(violations);
     }
 
-    public Account getAccount() {
+    Account getAccount() {
         return state;
     }
 
-    public List<String> getViolations() {
+    List<String> getViolations() {
         return violations;
     }
 }

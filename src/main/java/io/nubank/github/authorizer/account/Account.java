@@ -5,7 +5,7 @@ public class Account {
     private final boolean activeCard;
     private int availableLimit;
 
-    public Account(boolean activeCard, int availableLimit) {
+    Account(boolean activeCard, int availableLimit) {
         this.activeCard = activeCard;
         this.availableLimit = availableLimit;
     }
