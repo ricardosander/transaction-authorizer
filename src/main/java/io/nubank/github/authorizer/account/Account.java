@@ -18,7 +18,7 @@ public class Account {
         return availableLimit;
     }
 
-    Account getState() {
+    public Account getState() {
         return new Account(activeCard, availableLimit);
     }
 
