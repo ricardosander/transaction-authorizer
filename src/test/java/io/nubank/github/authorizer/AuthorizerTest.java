@@ -23,7 +23,7 @@ class AuthorizerTest {
     @Test
     void shouldCreateAccountSuccessfully_whenCreateAccountIsTheOnlyOperation() {
 
-        AccountCreation accountCreation = new AccountCreation(false, 750);
+        AccountCreation accountCreation = buildAccountCreation(false, 750);
         List<OperationRequest> requests = List.of(accountCreation);
 
         List<OperationResult> results = authorizer.execute(requests);
@@ -40,8 +40,8 @@ class AuthorizerTest {
     @Test
     void shouldReturnViolation_whenCreateAccountButAccountAlreadyExists() {
 
-        AccountCreation accountCreation = new AccountCreation(true, 175);
-        AccountCreation secondAccountCreation = new AccountCreation(true, 350);
+        AccountCreation accountCreation = buildAccountCreation(true, 175);
+        AccountCreation secondAccountCreation = buildAccountCreation(true, 350);
         List<OperationRequest> requests = List.of(accountCreation, secondAccountCreation);
 
         List<OperationResult> results = authorizer.execute(requests);
@@ -67,7 +67,7 @@ class AuthorizerTest {
     @Test
     void shouldCreateTransactionSuccessfully_whenAccountIsAlreadyCreated() {
 
-        AccountCreation accountCreation = new AccountCreation(true, 100);
+        AccountCreation accountCreation = buildAccountCreation(true, 100);
 
         LocalDateTime time = LocalDateTime.parse("2019-02-13T11:00:00.000");
         TransactionCreation transactionCreation = new TransactionCreation("Burger King", 20, time);
@@ -96,7 +96,7 @@ class AuthorizerTest {
     void shouldReturnAccountNotInitializedViolation_whenAccountIsNotCreatedBeforeTransactionCreation() {
 
         LocalDateTime time = LocalDateTime.parse("2020-12-01T11:07:00.000");
-        AccountCreation accountCreation = new AccountCreation(true, 225);
+        AccountCreation accountCreation = buildAccountCreation(true, 225);
         TransactionCreation transaction = new TransactionCreation("Uber Eats", 25, time);
 
         List<OperationRequest> requests = List.of(transaction, accountCreation, transaction);
@@ -122,5 +122,9 @@ class AuthorizerTest {
         assertThat(results.get(2).getAccount().isActiveCard()).isTrue();
         assertThat(results.get(2).getAccount().getAvailableLimit()).isEqualTo(200);
         assertThat(results.get(2).getViolations()).isEmpty();
+    }
+
+    private AccountCreation buildAccountCreation(boolean isCardActive, int availableLimit) {
+        return new AccountCreation(isCardActive, availableLimit);
     }
 }
