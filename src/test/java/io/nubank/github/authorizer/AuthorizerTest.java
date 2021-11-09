@@ -196,6 +196,7 @@ class AuthorizerTest {
         TransactionCreation subway = buildTransactionCreation("Subway", 20, "2019-02-13T11:01:31.000");
         TransactionCreation burgerKingAgain = buildTransactionCreation("Burger King", 10, "2019-02-13T12:00:00.000");
         List<OperationRequest> requests = List.of(account, burgerKing, habbibs, mcDonalds, subway, burgerKingAgain);
+
         List<OperationResult> results = authorizer.execute(requests);
 
         assertThat(results).isNotEmpty();
@@ -231,6 +232,48 @@ class AuthorizerTest {
         assertThat(results.get(5).getAccount().isActiveCard()).isTrue();
         assertThat(results.get(5).getAccount().getAvailableLimit()).isEqualTo(30);
         assertThat(results.get(5).getViolations()).isEmpty();
+    }
+
+    @Test
+    void shouldReturnDoubledTransactionViolation_whenTwoTransactionToSameMerchantAndValueAreMadeInLessThenTwoMinutes() {
+
+        AccountCreation account = buildAccountCreation(true, 100);
+        TransactionCreation burgerKing = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00.000");
+        TransactionCreation mcDonalds = buildTransactionCreation("McDonald's", 10, "2019-02-13T11:00:01.000");
+        TransactionCreation doubledBurgerKing = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:02.000");
+        TransactionCreation otherBurgerKing = buildTransactionCreation("Burger King", 15, "2019-02-13T11:00:03.000");
+        List<OperationRequest> requests = List.of(account, burgerKing, mcDonalds, doubledBurgerKing, otherBurgerKing);
+
+        List<OperationResult> results = authorizer.execute(requests);
+
+        assertThat(results).isNotEmpty();
+        assertThat(results.size()).isEqualTo(5);
+
+        assertThat(results.get(0).getAccount()).isNotNull();
+        assertThat(results.get(0).getAccount().isActiveCard()).isTrue();
+        assertThat(results.get(0).getAccount().getAvailableLimit()).isEqualTo(100);
+        assertThat(results.get(0).getViolations()).isEmpty();
+
+        assertThat(results.get(1).getAccount()).isNotNull();
+        assertThat(results.get(1).getAccount().isActiveCard()).isTrue();
+        assertThat(results.get(1).getAccount().getAvailableLimit()).isEqualTo(80);
+        assertThat(results.get(1).getViolations()).isEmpty();
+
+        assertThat(results.get(2).getAccount()).isNotNull();
+        assertThat(results.get(2).getAccount().isActiveCard()).isTrue();
+        assertThat(results.get(2).getAccount().getAvailableLimit()).isEqualTo(70);
+        assertThat(results.get(2).getViolations()).isEmpty();
+
+        assertThat(results.get(3).getAccount()).isNotNull();
+        assertThat(results.get(3).getAccount().isActiveCard()).isTrue();
+        assertThat(results.get(3).getAccount().getAvailableLimit()).isEqualTo(70);
+        assertThat(results.get(3).getViolations()).isNotEmpty();
+        assertThat(results.get(3).getViolations()).contains("doubled-transaction");
+
+        assertThat(results.get(4).getAccount()).isNotNull();
+        assertThat(results.get(4).getAccount().isActiveCard()).isTrue();
+        assertThat(results.get(4).getAccount().getAvailableLimit()).isEqualTo(55);
+        assertThat(results.get(4).getViolations()).isEmpty();
     }
 
     private AccountCreation buildAccountCreation(boolean isCardActive, int availableLimit) {
