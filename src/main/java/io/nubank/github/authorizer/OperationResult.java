@@ -1,7 +1,5 @@
 package io.nubank.github.authorizer;
 
-import io.nubank.github.authorizer.account.Account;
-
 import java.util.Collections;
 import java.util.List;
 
