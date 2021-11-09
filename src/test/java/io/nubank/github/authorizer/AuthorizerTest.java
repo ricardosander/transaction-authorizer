@@ -23,8 +23,8 @@ class AuthorizerTest {
     @Test
     void shouldCreateAccountSuccessfully_whenCreateAccountIsTheOnlyOperation() {
 
-        AccountCreation accountCreation = buildAccountCreation(false, 750);
-        List<OperationRequest> requests = List.of(accountCreation);
+        AccountCreation account = buildAccountCreation(false, 750);
+        List<OperationRequest> requests = List.of(account);
 
         List<OperationResult> results = authorizer.execute(requests);
 
@@ -40,9 +40,9 @@ class AuthorizerTest {
     @Test
     void shouldReturnViolation_whenCreateAccountButAccountAlreadyExists() {
 
-        AccountCreation accountCreation = buildAccountCreation(true, 175);
-        AccountCreation secondAccountCreation = buildAccountCreation(true, 350);
-        List<OperationRequest> requests = List.of(accountCreation, secondAccountCreation);
+        AccountCreation account = buildAccountCreation(true, 175);
+        AccountCreation secondAccount = buildAccountCreation(true, 350);
+        List<OperationRequest> requests = List.of(account, secondAccount);
 
         List<OperationResult> results = authorizer.execute(requests);
 
@@ -67,12 +67,9 @@ class AuthorizerTest {
     @Test
     void shouldCreateTransactionSuccessfully_whenAccountIsAlreadyCreated() {
 
-        AccountCreation accountCreation = buildAccountCreation(true, 100);
-
-        LocalDateTime time = buildTime("2019-02-13T11:00:00.000");
-        TransactionCreation transactionCreation = new TransactionCreation("Burger King", 20, time);
-
-        List<OperationRequest> requests = List.of(accountCreation, transactionCreation);
+        AccountCreation account = buildAccountCreation(true, 100);
+        TransactionCreation transaction = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00.000");
+        List<OperationRequest> requests = List.of(account, transaction);
 
         List<OperationResult> results = authorizer.execute(requests);
 
@@ -95,12 +92,9 @@ class AuthorizerTest {
     @Test
     void shouldReturnAccountNotInitializedViolation_whenAccountIsNotCreatedBeforeTransactionCreation() {
 
-        LocalDateTime time = buildTime("2020-12-01T11:07:00.000");
-        AccountCreation accountCreation = buildAccountCreation(true, 225);
-        TransactionCreation transaction = new TransactionCreation("Uber Eats", 25, time);
-
-        List<OperationRequest> requests = List.of(transaction, accountCreation, transaction);
-
+        AccountCreation account = buildAccountCreation(true, 225);
+        TransactionCreation transaction = buildTransactionCreation("Uber Eats", 25, "2020-12-01T11:07:00.000");
+        List<OperationRequest> requests = List.of(transaction, account, transaction);
         List<OperationResult> results = authorizer.execute(requests);
 
         assertThat(results).isNotEmpty();
@@ -126,6 +120,10 @@ class AuthorizerTest {
 
     private AccountCreation buildAccountCreation(boolean isCardActive, int availableLimit) {
         return new AccountCreation(isCardActive, availableLimit);
+    }
+
+    private TransactionCreation buildTransactionCreation(String merchant, int amount, String time) {
+        return new TransactionCreation(merchant, amount, buildTime(time));
     }
 
     private LocalDateTime buildTime(String time) {
