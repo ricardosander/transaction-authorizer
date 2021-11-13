@@ -31,7 +31,117 @@ class AuthorizerApplicationTests {
     @Test
     void testExample() throws IOException {
 
-        String testCase = "example";
+        String testCase = "simple-example";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testAccountCreation() throws IOException {
+
+        String testCase = "account-creation";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testAccountCreationWithViolation() throws IOException {
+
+        String testCase = "account-creation-with-violation";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testTransactionCreation() throws IOException {
+
+        String testCase = "transaction-creation";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testTransactionCreationAccountNotInitialized() throws IOException {
+
+        String testCase = "transaction-creation-account-not-initialized";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testTransactionCreationCardNotActive() throws IOException {
+
+        String testCase = "transaction-creation-card-not-active";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testTransactionCreationInsufficientLimit() throws IOException {
+
+        String testCase = "transaction-creation-insufficient-limit";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testTransactionCreationHighFrequencySmallInterval() throws IOException {
+
+        String testCase = "transaction-creation-high-frequency-small-interval";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testTransactionCreationDoubledTransaction() throws IOException {
+
+        String testCase = "transaction-creation-doubled-transaction";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testTransactionCreationMultipleViolations() throws IOException {
+
+        String testCase = "transaction-creation-multiple-violations";
+        String expectedResult = configureInputAndOutput(testCase);
+
+        AuthorizerApplication.main(APPLICATION_ARGS);
+
+        assertThat(outContent.toString().trim()).isEqualTo(expectedResult.trim());
+    }
+
+    @Test
+    void testComplexExample() throws IOException {
+
+        String testCase = "complex-example";
         String expectedResult = configureInputAndOutput(testCase);
 
         AuthorizerApplication.main(APPLICATION_ARGS);
