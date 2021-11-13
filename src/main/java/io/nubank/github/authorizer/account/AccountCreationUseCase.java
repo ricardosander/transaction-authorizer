@@ -1,6 +1,5 @@
 package io.nubank.github.authorizer.account;
 
-import io.nubank.github.authorizer.AccountResult;
 import io.nubank.github.authorizer.OperationResult;
 
 import java.util.ArrayList;

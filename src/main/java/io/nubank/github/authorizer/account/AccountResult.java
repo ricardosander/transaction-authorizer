@@ -1,6 +1,4 @@
-package io.nubank.github.authorizer;
-
-import io.nubank.github.authorizer.account.Account;
+package io.nubank.github.authorizer.account;
 
 public class AccountResult {
 
@@ -12,11 +10,11 @@ public class AccountResult {
         this.availableLimit = availableLimit;
     }
 
-    boolean isActiveCard() {
+    public boolean isActiveCard() {
         return activeCard;
     }
 
-    int getAvailableLimit() {
+    public int getAvailableLimit() {
         return availableLimit;
     }
 
