@@ -1,6 +1,6 @@
 package io.nubank.github.authorizer.transaction;
 
-import io.nubank.github.authorizer.AccountResult;
+import io.nubank.github.authorizer.account.AccountResult;
 import io.nubank.github.authorizer.OperationResult;
 import io.nubank.github.authorizer.account.Account;
 import io.nubank.github.authorizer.account.AccountRepository;
@@ -29,16 +29,17 @@ public class TransactionCreationUseCase {
         }
 
         List<String> violations = new ArrayList<>();
+
+        if (request.getAmount() > account.getAvailableLimit()) {
+            violations.add("insufficient-limit");
+        }
+
         if (isHighFrequencySmallInterval(account, request)) {
             violations.add("high-frequency-small-interval");
         }
 
         if (isDoubledTransaction(account, request)) {
             violations.add("doubled-transaction");
-        }
-
-        if (request.getAmount() > account.getAvailableLimit()) {
-            violations.add("insufficient-limit");
         }
 
         if (violations.isEmpty()) {
