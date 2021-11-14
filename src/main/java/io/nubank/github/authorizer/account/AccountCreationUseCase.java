@@ -7,16 +7,16 @@ import java.util.List;
 public class AccountCreationUseCase {
 
     private final AccountRepository repository;
-    private final AccountCreationRule rules;
+    private final AccountCreationViolationVerifier violationVerifier;
 
     public AccountCreationUseCase(AccountRepository accountRepository) {
         repository = accountRepository;
-        rules = AccountCreationRuleFactory.create();
+        violationVerifier = AccountCreationViolationVerifierFactory.create();
     }
 
     public OperationResult execute(AccountCreationRequest request) {
 
-        List<String> violations = rules.handle(repository.getAccount(), request);
+        List<String> violations = violationVerifier.verify(repository.getAccount(), request);
 
         if (violations.isEmpty()) {
             repository.save(new Account(request.isActiveCard(), request.getAvailableLimit()));
