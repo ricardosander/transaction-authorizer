@@ -4,13 +4,13 @@ import io.nubank.github.authorizer.OperationRequest;
 
 import java.time.LocalDateTime;
 
-public class TransactionCreation implements OperationRequest {
+public class TransactionCreationRequest implements OperationRequest {
 
     private final String merchant;
     private final int amount;
     private final LocalDateTime time;
 
-    public TransactionCreation(String merchant, int amount, LocalDateTime time) {
+    public TransactionCreationRequest(String merchant, int amount, LocalDateTime time) {
         this.merchant = merchant;
         this.amount = amount;
         this.time = time;

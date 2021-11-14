@@ -9,7 +9,7 @@ abstract class TransactionCreationBaseRule implements TransactionCreationRule {
 
     private TransactionCreationRule next;
 
-    public List<String> handle(Account account, TransactionCreation request) {
+    public List<String> handle(Account account, TransactionCreationRequest request) {
         if (next == null) {
             return new ArrayList<>();
         }

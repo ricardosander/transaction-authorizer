@@ -8,7 +8,7 @@ class AccountCreationBaseRule implements AccountCreationRule {
     private AccountCreationRule next;
 
     @Override
-    public List<String> handle(Account account, AccountCreation accountCreation) {
+    public List<String> handle(Account account, AccountCreationRequest accountCreation) {
         if (next == null) {
             return new ArrayList<>();
         }

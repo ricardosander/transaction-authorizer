@@ -14,7 +14,7 @@ public class AccountCreationUseCase {
         rules = AccountCreationRuleFactory.create();
     }
 
-    public OperationResult execute(AccountCreation request) {
+    public OperationResult execute(AccountCreationRequest request) {
 
         List<String> violations = rules.handle(repository.getAccount(), request);
 

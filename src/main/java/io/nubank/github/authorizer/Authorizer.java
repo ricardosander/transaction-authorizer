@@ -1,9 +1,9 @@
 package io.nubank.github.authorizer;
 
-import io.nubank.github.authorizer.account.AccountCreation;
+import io.nubank.github.authorizer.account.AccountCreationRequest;
 import io.nubank.github.authorizer.account.AccountCreationUseCase;
 import io.nubank.github.authorizer.account.AccountRepository;
-import io.nubank.github.authorizer.transaction.TransactionCreation;
+import io.nubank.github.authorizer.transaction.TransactionCreationRequest;
 import io.nubank.github.authorizer.transaction.TransactionCreationUseCase;
 
 import java.util.ArrayList;
@@ -24,12 +24,12 @@ class Authorizer {
         List<OperationResult> results = new ArrayList<>();
 
         requests.forEach(request -> {
-            if (request instanceof AccountCreation) {
-                results.add(accountCreation.execute((AccountCreation) request));
+            if (request instanceof AccountCreationRequest) {
+                results.add(accountCreation.execute((AccountCreationRequest) request));
             }
 
-            if (request instanceof TransactionCreation) {
-                results.add(transactionCreation.execute((TransactionCreation) request));
+            if (request instanceof TransactionCreationRequest) {
+                results.add(transactionCreation.execute((TransactionCreationRequest) request));
             }
         });
 

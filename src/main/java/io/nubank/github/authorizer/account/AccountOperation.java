@@ -18,6 +18,6 @@ public class AccountOperation implements Operation {
     }
 
     public OperationRequest toDomain() {
-        return new AccountCreation(activeCard, availableLimit);
+        return new AccountCreationRequest(activeCard, availableLimit);
     }
 }

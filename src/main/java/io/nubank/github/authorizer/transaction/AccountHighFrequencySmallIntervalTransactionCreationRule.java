@@ -7,7 +7,7 @@ import java.util.List;
 
 class AccountHighFrequencySmallIntervalTransactionCreationRule extends TransactionCreationBaseRule {
 
-    public List<String> handle(Account account, TransactionCreation request) {
+    public List<String> handle(Account account, TransactionCreationRequest request) {
         List<String> violations = super.handle(account, request);
         if (account != null && isHighFrequencySmallInterval(account, request)) {
             violations.add("high-frequency-small-interval");
@@ -15,7 +15,7 @@ class AccountHighFrequencySmallIntervalTransactionCreationRule extends Transacti
         return violations;
     }
 
-    private boolean isHighFrequencySmallInterval(Account account, TransactionCreation request) {
+    private boolean isHighFrequencySmallInterval(Account account, TransactionCreationRequest request) {
         List<Transaction> accountTransactions = account.getTransactions();
         if (accountTransactions.size() < 3) {
             return false;

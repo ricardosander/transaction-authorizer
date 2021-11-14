@@ -18,7 +18,7 @@ public class TransactionCreationUseCase {
         this.rules = TransactionCreationRulesFactory.create();
     }
 
-    public OperationResult execute(TransactionCreation request) {
+    public OperationResult execute(TransactionCreationRequest request) {
 
         Account account = accountRepository.getAccount();
         List<String> violations = rules.handle(account, request);

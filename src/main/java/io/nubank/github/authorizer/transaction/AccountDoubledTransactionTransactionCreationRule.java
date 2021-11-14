@@ -7,7 +7,7 @@ import java.util.List;
 
 class AccountDoubledTransactionTransactionCreationRule extends TransactionCreationBaseRule {
 
-    public List<String> handle(Account account, TransactionCreation request) {
+    public List<String> handle(Account account, TransactionCreationRequest request) {
         List<String> violations = super.handle(account, request);
         if (account != null && isDoubledTransaction(account, request)) {
             violations.add("doubled-transaction");
@@ -15,7 +15,7 @@ class AccountDoubledTransactionTransactionCreationRule extends TransactionCreati
         return violations;
     }
 
-    private boolean isDoubledTransaction(Account account, TransactionCreation request) {
+    private boolean isDoubledTransaction(Account account, TransactionCreationRequest request) {
         List<Transaction> accountTransactions = account.getTransactions();
         if (accountTransactions.isEmpty()) {
             return false;
@@ -25,7 +25,7 @@ class AccountDoubledTransactionTransactionCreationRule extends TransactionCreati
                 .anyMatch(transaction -> isDoubleTransaction(request, limit, transaction));
     }
 
-    private boolean isDoubleTransaction(TransactionCreation request, LocalDateTime limit, Transaction transaction) {
+    private boolean isDoubleTransaction(TransactionCreationRequest request, LocalDateTime limit, Transaction transaction) {
         return transaction.getMerchant().equals(request.getMerchant())
                 && transaction.getAmount() == request.getAmount()
                 && limit.isBefore(transaction.getTime());

@@ -25,6 +25,6 @@ public class TransactionOperation implements Operation {
     }
 
     public OperationRequest toDomain() {
-        return new TransactionCreation(merchant, amount, LocalDateTime.parse(time, FORMATTER));
+        return new TransactionCreationRequest(merchant, amount, LocalDateTime.parse(time, FORMATTER));
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 class AccountCardActiveTransactionCreationRule extends TransactionCreationBaseRule {
 
-    public List<String> handle(Account account, TransactionCreation request) {
+    public List<String> handle(Account account, TransactionCreationRequest request) {
         List<String> violations = super.handle(account, request);
         if (account != null && !account.isActiveCard()) {
             violations.add("card-not-active");

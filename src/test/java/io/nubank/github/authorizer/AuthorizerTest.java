@@ -1,9 +1,9 @@
 package io.nubank.github.authorizer;
 
-import io.nubank.github.authorizer.account.AccountCreation;
+import io.nubank.github.authorizer.account.AccountCreationRequest;
 import io.nubank.github.authorizer.account.AccountRepository;
 import io.nubank.github.authorizer.account.AccountRepositoryFactory;
-import io.nubank.github.authorizer.transaction.TransactionCreation;
+import io.nubank.github.authorizer.transaction.TransactionCreationRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ class AuthorizerTest {
     @Test
     void shouldCreateAccountSuccessfully_whenCreateAccountIsTheOnlyOperation() {
 
-        AccountCreation account = buildAccountCreation(false, 750);
+        AccountCreationRequest account = buildAccountCreation(false, 750);
         List<OperationRequest> requests = List.of(account);
 
         List<OperationResult> results = authorizer.execute(requests);
@@ -43,8 +43,8 @@ class AuthorizerTest {
     @Test
     void shouldReturnViolation_whenCreateAccountButAccountAlreadyExists() {
 
-        AccountCreation account1 = buildAccountCreation(true, 175);
-        AccountCreation account2 = buildAccountCreation(true, 350);
+        AccountCreationRequest account1 = buildAccountCreation(true, 175);
+        AccountCreationRequest account2 = buildAccountCreation(true, 350);
         List<OperationRequest> requests = List.of(account1, account2);
 
         List<OperationResult> results = authorizer.execute(requests);
@@ -70,8 +70,8 @@ class AuthorizerTest {
     @Test
     void shouldCreateTransactionSuccessfully_whenAccountIsAlreadyCreated() {
 
-        AccountCreation account = buildAccountCreation(true, 100);
-        TransactionCreation transaction = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
+        AccountCreationRequest account = buildAccountCreation(true, 100);
+        TransactionCreationRequest transaction = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
         List<OperationRequest> requests = List.of(account, transaction);
 
         List<OperationResult> results = authorizer.execute(requests);
@@ -95,8 +95,8 @@ class AuthorizerTest {
     @Test
     void shouldReturnAccountNotInitializedViolation_whenAccountIsNotCreatedBeforeTransactionCreation() {
 
-        AccountCreation account = buildAccountCreation(true, 225);
-        TransactionCreation transaction = buildTransactionCreation("Uber Eats", 25, "2020-12-01T11:07:00");
+        AccountCreationRequest account = buildAccountCreation(true, 225);
+        TransactionCreationRequest transaction = buildTransactionCreation("Uber Eats", 25, "2020-12-01T11:07:00");
         List<OperationRequest> requests = List.of(transaction, account, transaction);
         List<OperationResult> results = authorizer.execute(requests);
 
@@ -124,9 +124,9 @@ class AuthorizerTest {
     @Test
     void shouldReturnCardNotActiveViolation_whenTryToCreateTransactionAndCardAccountIsInactive() {
 
-        AccountCreation account = buildAccountCreation(false, 100);
-        TransactionCreation transaction1 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
-        TransactionCreation transaction2 = buildTransactionCreation("Habbib's", 15, "2019-02-13T11:15:00");
+        AccountCreationRequest account = buildAccountCreation(false, 100);
+        TransactionCreationRequest transaction1 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
+        TransactionCreationRequest transaction2 = buildTransactionCreation("Habbib's", 15, "2019-02-13T11:15:00");
         List<OperationRequest> requests = List.of(account, transaction1, transaction2);
 
         List<OperationResult> results = authorizer.execute(requests);
@@ -155,10 +155,10 @@ class AuthorizerTest {
     @Test
     void shouldReturnInsufficientLimitViolation_whenTransactionExceedsAccountLimit() {
 
-        AccountCreation account = buildAccountCreation(true, 1000);
-        TransactionCreation transaction1 = buildTransactionCreation("Vivara", 1250, "2019-02-13T11:00:00");
-        TransactionCreation transaction2 = buildTransactionCreation("Samsung", 2500, "2019-02-13T11:00:01");
-        TransactionCreation transaction3 = buildTransactionCreation("Nike", 800, "2019-02-13T11:01:01");
+        AccountCreationRequest account = buildAccountCreation(true, 1000);
+        TransactionCreationRequest transaction1 = buildTransactionCreation("Vivara", 1250, "2019-02-13T11:00:00");
+        TransactionCreationRequest transaction2 = buildTransactionCreation("Samsung", 2500, "2019-02-13T11:00:01");
+        TransactionCreationRequest transaction3 = buildTransactionCreation("Nike", 800, "2019-02-13T11:01:01");
         List<OperationRequest> requests = List.of(account, transaction1, transaction2, transaction3);
 
         List<OperationResult> results = authorizer.execute(requests);
@@ -192,12 +192,12 @@ class AuthorizerTest {
     @Test
     void shouldReturnHighFrequencySmallIntervalViolation_whenFourTransactionAreMadeInLessThenTowMinutes() {
 
-        AccountCreation account = buildAccountCreation(true, 100);
-        TransactionCreation transaction1 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
-        TransactionCreation transaction2 = buildTransactionCreation("Habbib's", 20, "2019-02-13T11:00:01");
-        TransactionCreation transaction3 = buildTransactionCreation("McDonald's", 20, "2019-02-13T11:01:01");
-        TransactionCreation transaction4 = buildTransactionCreation("Subway", 20, "2019-02-13T11:01:31");
-        TransactionCreation transaction5 = buildTransactionCreation("Burger King", 10, "2019-02-13T12:00:00");
+        AccountCreationRequest account = buildAccountCreation(true, 100);
+        TransactionCreationRequest transaction1 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
+        TransactionCreationRequest transaction2 = buildTransactionCreation("Habbib's", 20, "2019-02-13T11:00:01");
+        TransactionCreationRequest transaction3 = buildTransactionCreation("McDonald's", 20, "2019-02-13T11:01:01");
+        TransactionCreationRequest transaction4 = buildTransactionCreation("Subway", 20, "2019-02-13T11:01:31");
+        TransactionCreationRequest transaction5 = buildTransactionCreation("Burger King", 10, "2019-02-13T12:00:00");
         List<OperationRequest> requests = List.of(account, transaction1, transaction2, transaction3, transaction4, transaction5);
 
         List<OperationResult> results = authorizer.execute(requests);
@@ -240,11 +240,11 @@ class AuthorizerTest {
     @Test
     void shouldReturnDoubledTransactionViolation_whenTwoTransactionToSameMerchantAndValueAreMadeInLessThenTwoMinutes() {
 
-        AccountCreation account = buildAccountCreation(true, 100);
-        TransactionCreation transaction1 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
-        TransactionCreation transaction2 = buildTransactionCreation("McDonald's", 10, "2019-02-13T11:00:01");
-        TransactionCreation transaction3 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:02");
-        TransactionCreation transaction4 = buildTransactionCreation("Burger King", 15, "2019-02-13T11:00:03");
+        AccountCreationRequest account = buildAccountCreation(true, 100);
+        TransactionCreationRequest transaction1 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:00");
+        TransactionCreationRequest transaction2 = buildTransactionCreation("McDonald's", 10, "2019-02-13T11:00:01");
+        TransactionCreationRequest transaction3 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:02");
+        TransactionCreationRequest transaction4 = buildTransactionCreation("Burger King", 15, "2019-02-13T11:00:03");
         List<OperationRequest> requests = List.of(account, transaction1, transaction2, transaction3, transaction4);
 
         List<OperationResult> results = authorizer.execute(requests);
@@ -282,14 +282,14 @@ class AuthorizerTest {
     @Test
     void shouldReturnMultipleViolations_whenMultipleViolationsAreFound() {
 
-        AccountCreation account = buildAccountCreation(true, 100);
-        TransactionCreation transaction = buildTransactionCreation("McDonald's", 10, "2019-02-13T11:00:01");
-        TransactionCreation transaction2 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:02");
-        TransactionCreation transaction3 = buildTransactionCreation("Burger King", 5, "2019-02-13T11:00:07");
-        TransactionCreation transaction4 = buildTransactionCreation("Burger King", 5, "2019-02-13T11:00:08");
-        TransactionCreation transaction5 = buildTransactionCreation("Burger King", 150, "2019-02-13T11:00:18");
-        TransactionCreation transaction6 = buildTransactionCreation("Burger King", 190, "2019-02-13T11:00:22");
-        TransactionCreation transaction7 = buildTransactionCreation("Burger King", 15, "2019-02-13T12:00:27");
+        AccountCreationRequest account = buildAccountCreation(true, 100);
+        TransactionCreationRequest transaction = buildTransactionCreation("McDonald's", 10, "2019-02-13T11:00:01");
+        TransactionCreationRequest transaction2 = buildTransactionCreation("Burger King", 20, "2019-02-13T11:00:02");
+        TransactionCreationRequest transaction3 = buildTransactionCreation("Burger King", 5, "2019-02-13T11:00:07");
+        TransactionCreationRequest transaction4 = buildTransactionCreation("Burger King", 5, "2019-02-13T11:00:08");
+        TransactionCreationRequest transaction5 = buildTransactionCreation("Burger King", 150, "2019-02-13T11:00:18");
+        TransactionCreationRequest transaction6 = buildTransactionCreation("Burger King", 190, "2019-02-13T11:00:22");
+        TransactionCreationRequest transaction7 = buildTransactionCreation("Burger King", 15, "2019-02-13T12:00:27");
         List<OperationRequest> requests = List.of(
                account,
                transaction,
@@ -353,12 +353,12 @@ class AuthorizerTest {
         assertThat(results.get(7).getViolations()).isEmpty();
     }
 
-    private AccountCreation buildAccountCreation(boolean isCardActive, int availableLimit) {
-        return new AccountCreation(isCardActive, availableLimit);
+    private AccountCreationRequest buildAccountCreation(boolean isCardActive, int availableLimit) {
+        return new AccountCreationRequest(isCardActive, availableLimit);
     }
 
-    private TransactionCreation buildTransactionCreation(String merchant, int amount, String time) {
-        return new TransactionCreation(merchant, amount, buildTime(time));
+    private TransactionCreationRequest buildTransactionCreation(String merchant, int amount, String time) {
+        return new TransactionCreationRequest(merchant, amount, buildTime(time));
     }
 
     private LocalDateTime buildTime(String time) {
