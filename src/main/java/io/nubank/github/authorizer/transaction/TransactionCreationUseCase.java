@@ -1,9 +1,9 @@
 package io.nubank.github.authorizer.transaction;
 
-import io.nubank.github.authorizer.account.AccountResult;
 import io.nubank.github.authorizer.OperationResult;
 import io.nubank.github.authorizer.account.Account;
 import io.nubank.github.authorizer.account.AccountRepository;
+import io.nubank.github.authorizer.account.AccountResult;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

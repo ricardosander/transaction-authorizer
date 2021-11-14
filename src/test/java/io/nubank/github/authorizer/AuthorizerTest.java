@@ -2,6 +2,7 @@ package io.nubank.github.authorizer;
 
 import io.nubank.github.authorizer.account.AccountCreation;
 import io.nubank.github.authorizer.account.AccountRepository;
+import io.nubank.github.authorizer.account.AccountRepositoryFactory;
 import io.nubank.github.authorizer.transaction.TransactionCreation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,9 @@ class AuthorizerTest {
 
     @BeforeEach
     void setUp() {
-        authorizer = new Authorizer(new AccountRepository());
+        AccountRepository accountRepository = AccountRepositoryFactory.create();
+        accountRepository.save(null);
+        authorizer = new Authorizer(accountRepository);
     }
 
     @Test

@@ -15,11 +15,9 @@ public class AccountCreationUseCase {
     public OperationResult execute(AccountCreation request) {
 
         ArrayList<String> violations = new ArrayList<>();
-        Account account = repository.getAccount();
-        if (account == null) {
-            account = new Account(request.isActiveCard(), request.getAvailableLimit());
-            repository.setAccount(account);
-        } else {
+        Account account = new Account(request.isActiveCard(), request.getAvailableLimit());
+        if (!repository.save(account)) {
+            account = repository.getAccount();
             violations.add("account-already-initialized");
         }
         return new OperationResult(AccountResult.createFrom(account), violations);

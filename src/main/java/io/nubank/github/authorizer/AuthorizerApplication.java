@@ -1,6 +1,6 @@
 package io.nubank.github.authorizer;
 
-import io.nubank.github.authorizer.account.AccountRepository;
+import io.nubank.github.authorizer.account.AccountRepositoryFactory;
 import io.nubank.github.authorizer.account.AccountResult;
 import io.nubank.github.authorizer.account.AccountResultJsonSerializer;
 import org.codehaus.jackson.Version;
@@ -26,7 +26,7 @@ public class AuthorizerApplication {
             requests.add(operation.toDomain());
         }
 
-        List<OperationResult> results = new Authorizer(new AccountRepository())
+        List<OperationResult> results = new Authorizer(AccountRepositoryFactory.create())
                 .execute(requests);
 
         for (OperationResult result : results) {
