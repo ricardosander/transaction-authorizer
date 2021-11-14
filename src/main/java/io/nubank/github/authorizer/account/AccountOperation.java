@@ -8,9 +8,13 @@ public class AccountOperation implements Operation {
     private final boolean activeCard;
     private final int availableLimit;
 
-    public AccountOperation(boolean activeCard, int availableLimit) {
+    private AccountOperation(boolean activeCard, int availableLimit) {
         this.activeCard = activeCard;
         this.availableLimit = availableLimit;
+    }
+
+    public static Operation create(boolean activeCard, int availableLimit) {
+        return new AccountOperation(activeCard, availableLimit);
     }
 
     public OperationRequest toDomain() {

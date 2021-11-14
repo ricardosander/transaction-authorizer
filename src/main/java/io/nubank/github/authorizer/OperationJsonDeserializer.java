@@ -18,7 +18,7 @@ class OperationJsonDeserializer extends JsonDeserializer<Operation> {
 
         JsonNode account = jsonNode.get("account");
         if (account != null) {
-            return new AccountOperation(
+            return AccountOperation.create(
                     account.get("active-card").asBoolean(),
                     account.get("available-limit").asInt()
             );
@@ -26,13 +26,13 @@ class OperationJsonDeserializer extends JsonDeserializer<Operation> {
 
         JsonNode transaction = jsonNode.get("transaction");
         if (transaction != null) {
-            return new TransactionOperation(
+            return TransactionOperation.create(
                     transaction.get("merchant").asText(),
                     transaction.get("amount").asInt(),
                     transaction.get("time").asText()
             );
         }
 
-        return null;
+        throw new IllegalArgumentException("Unexpected Operation type");
     }
 }

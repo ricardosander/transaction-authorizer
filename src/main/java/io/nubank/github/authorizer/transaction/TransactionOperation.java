@@ -14,10 +14,14 @@ public class TransactionOperation implements Operation {
     private final int amount;
     private final String time;
 
-    public TransactionOperation(String merchant, int amount, String time) {
+    private TransactionOperation(String merchant, int amount, String time) {
         this.merchant = merchant;
         this.amount = amount;
         this.time = time;
+    }
+
+    public static Operation create(String merchant, int amount, String time) {
+        return new TransactionOperation(merchant, amount, time);
     }
 
     public OperationRequest toDomain() {
