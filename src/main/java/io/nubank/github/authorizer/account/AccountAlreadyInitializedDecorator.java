@@ -2,9 +2,9 @@ package io.nubank.github.authorizer.account;
 
 import java.util.List;
 
-class AccountAlreadyInitializedViolationVerifierDecorator extends AccountCreationViolationVerifierDecorator {
+class AccountAlreadyInitializedDecorator extends AccountCreationViolationVerifierDecorator {
 
-    AccountAlreadyInitializedViolationVerifierDecorator(AccountCreationViolationVerifier wrappee) {
+    AccountAlreadyInitializedDecorator(AccountCreationViolationVerifier wrappee) {
         super(wrappee);
     }
 
