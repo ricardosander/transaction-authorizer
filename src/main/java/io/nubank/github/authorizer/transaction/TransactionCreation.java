@@ -27,4 +27,8 @@ public class TransactionCreation implements OperationRequest {
     LocalDateTime getTime() {
         return time;
     }
+
+    public Transaction toDomain() {
+        return new Transaction(merchant, amount, time);
+    }
 }

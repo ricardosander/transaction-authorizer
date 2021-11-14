@@ -19,6 +19,9 @@ public class AccountResult {
     }
 
     public static AccountResult createFrom(Account account) {
+        if (account == null) {
+            return null;
+        }
         return new AccountResult(account.isActiveCard(), account.getAvailableLimit());
     }
 }

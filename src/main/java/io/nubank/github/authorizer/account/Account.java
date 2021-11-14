@@ -26,7 +26,7 @@ public class Account {
         return availableLimit;
     }
 
-    public boolean add(Transaction transaction) {
+    public boolean transfer(Transaction transaction) {
         if (transaction.getAmount() > availableLimit) {
             return false;
         }
