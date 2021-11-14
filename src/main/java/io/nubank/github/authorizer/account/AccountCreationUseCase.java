@@ -6,22 +6,24 @@ import java.util.List;
 
 public class AccountCreationUseCase {
 
-    private final AccountRepository repository;
+    private final AccountRepository accountRepository;
     private final AccountCreationViolationVerifier violationVerifier;
 
     public AccountCreationUseCase(AccountRepository accountRepository) {
-        repository = accountRepository;
+        this.accountRepository = accountRepository;
         violationVerifier = AccountCreationViolationVerifierFactory.create();
     }
 
     public OperationResult execute(AccountCreationRequest request) {
 
-        List<String> violations = violationVerifier.verify(repository.getAccount(), request);
+        Account account = accountRepository.getAccount();
+        List<String> violations = violationVerifier.verify(account, request);
 
         if (violations.isEmpty()) {
-            repository.save(new Account(request.isActiveCard(), request.getAvailableLimit()));
+            account = new Account(request.isActiveCard(), request.getAvailableLimit());
+            accountRepository.save(account);
         }
 
-        return new OperationResult(AccountResult.createFrom(repository.getAccount()), violations);
+        return new OperationResult(AccountResult.createFrom(account), violations);
     }
 }
