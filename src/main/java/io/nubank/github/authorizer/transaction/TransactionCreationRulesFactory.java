@@ -2,22 +2,14 @@ package io.nubank.github.authorizer.transaction;
 
 abstract class TransactionCreationRulesFactory {
 
-    static TransactionCreationRule create() {
+    static TransactionCreationViolationVerifier create() {
 
-        AccountCreatedTransactionCreationRule accountCreatedRule = new AccountCreatedTransactionCreationRule();
+        AccountCreatedDecorator createdDecorator = new AccountCreatedDecorator(null);
+        AccountCardActiveDecorator accountCardActiveDecorator = new AccountCardActiveDecorator(createdDecorator);
+        AccountHasLimitDecorator accountHasLimitDecorator = new AccountHasLimitDecorator(accountCardActiveDecorator);
+        AccountHighFrequencySmallIntervalDecorator accountHighFrequencySmallIntervalDecorator = new AccountHighFrequencySmallIntervalDecorator(accountHasLimitDecorator);
+        AccountDoubledTransactionDecorator accountDoubledTransactionDecorator = new AccountDoubledTransactionDecorator(accountHighFrequencySmallIntervalDecorator);
 
-        AccountCardActiveTransactionCreationRule accountCardActiveRule = new AccountCardActiveTransactionCreationRule();
-        accountCardActiveRule.setNext(accountCreatedRule);
-
-        AccountHasLimitTransactionCreationRule accountHasLimitRule = new AccountHasLimitTransactionCreationRule();
-        accountHasLimitRule.setNext(accountCardActiveRule);
-
-        AccountHighFrequencySmallIntervalTransactionCreationRule accountHighFrequencySmallIntervalRule = new AccountHighFrequencySmallIntervalTransactionCreationRule();
-        accountHighFrequencySmallIntervalRule.setNext(accountHasLimitRule);
-
-        AccountDoubledTransactionTransactionCreationRule accountDoubledTransaction = new AccountDoubledTransactionTransactionCreationRule();
-        accountDoubledTransaction.setNext(accountHighFrequencySmallIntervalRule);
-
-        return accountDoubledTransaction;
+        return accountDoubledTransactionDecorator;
     }
 }

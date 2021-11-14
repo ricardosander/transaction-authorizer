@@ -10,18 +10,17 @@ import java.util.List;
 public class TransactionCreationUseCase {
 
     private final AccountRepository accountRepository;
-
-    private final TransactionCreationRule rules;
+    private final TransactionCreationViolationVerifier violationVerifier;
 
     public TransactionCreationUseCase(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
-        this.rules = TransactionCreationRulesFactory.create();
+        this.violationVerifier = TransactionCreationRulesFactory.create();
     }
 
     public OperationResult execute(TransactionCreationRequest request) {
 
         Account account = accountRepository.getAccount();
-        List<String> violations = rules.handle(account, request);
+        List<String> violations = violationVerifier.verify(account, request);
 
         if (violations.isEmpty()) {
             account.transfer(request.toDomain());

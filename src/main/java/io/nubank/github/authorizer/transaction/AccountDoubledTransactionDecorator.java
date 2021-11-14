@@ -5,10 +5,14 @@ import io.nubank.github.authorizer.account.Account;
 import java.time.LocalDateTime;
 import java.util.List;
 
-class AccountDoubledTransactionTransactionCreationRule extends TransactionCreationBaseRule {
+class AccountDoubledTransactionDecorator extends TransactionCreationViolationVerifierDecorator {
 
-    public List<String> handle(Account account, TransactionCreationRequest request) {
-        List<String> violations = super.handle(account, request);
+    public AccountDoubledTransactionDecorator(TransactionCreationViolationVerifier next) {
+        super(next);
+    }
+
+    public List<String> verify(Account account, TransactionCreationRequest request) {
+        List<String> violations = super.verify(account, request);
         if (account != null && isDoubledTransaction(account, request)) {
             violations.add("doubled-transaction");
         }
