@@ -86,7 +86,7 @@ validando o resultado contra um arquivo de output esperado, os quais se encontra
 
 ### 1.6 Performance
 
-Houveram três pontos de atenção a performance da aplicação:
+Houveram três pontos de atenção em relação à performance da aplicação:
 
 - Lista de transações: embora a lista seja referenciada por sua abstração, decidiu-se por inicializá-la como uma 
   `LinkedList` (lista duplamenta ligada) pensado nas operações de inserções nas extremidades, que são extremamente 
@@ -122,7 +122,7 @@ Porém, algumas bibliotecas foram incluídas:
 - `maven-compiler-plugin`: esse é um plugin utilizado pelo Maven para executador a compilação do projeto. É 
   utilizado para a etapa de compilação da aplicação.
 - `maven-surefire-plugin`: esse plugin é utilizado para adicionar o jUnit Jupiter no ciclo de vida do Maven, ou seja,
-  é necessários para que os testes sejam rodados durante o ciclo de compilação da aplicação. É utilizado apenas para 
+  é necessário para que os testes sejam rodados durante o ciclo de compilação da aplicação. É utilizado apenas para 
   a etapa de testes da aplicação.
 - `maven-assembly-plugin`: esse plugin do Maven nos ajuda a criarmos um arquivo `jar` independente e executável. Com 
   eles conseguimos definir a `main class` a ser executada, adicionamos as dependências dentro do pacote e renomeados 
@@ -136,7 +136,7 @@ utilizando apenas Docker.
 
 ### 3.1 - JDK
 
-Caso tenha o JDK 11+ instalado, você pode fazer a compilação do projeto usando Maven. Dessa forma, um arquivo `jar 
+Caso tenha o JDK 11+ instalado, você pode fazer a compilação do projeto usando Maven. Dessa forma, um arquivo `jar` 
 será gerado para execução.
 
 #### 3.1.1 - Compilação com Maven
@@ -147,7 +147,7 @@ Caso tenha o Maven 3.8.3 instalado, você pode rodar o seguinte comando, na raiz
 
 #### 3.1.2 - "No Maven? No problem"
 
-Caso não tenha o Maven instalado, não tem problema, o projeto já vem com um Maven "embutido" (Maven Wrapper). Porém, 
+Caso não tenha o Maven instalado, não tem problema: o projeto já vem com um Maven "embutido" (Maven Wrapper). Porém, 
 ainda sim é necessário ter o JDK 11+ instalado para esse método. 
 
 Basta rodar o seguinte comando na raiz desse projeto: 
@@ -178,7 +178,7 @@ imagem o projeto terá sido compilado e estará pronto para execução.
 
 `docker image build -t authorizer .`
 
-No comando a cima, estamos dando o nome da imagem de `authorizer`, mas você pode escolher o nome que preferir.
+No comando anterior, estamos dando o nome da imagem de `authorizer`, mas você pode escolher o nome que preferir.
 
 #### 3.2.2 - Running
 
