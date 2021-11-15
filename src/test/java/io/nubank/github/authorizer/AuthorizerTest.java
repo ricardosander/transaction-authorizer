@@ -14,13 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthorizerTest {
 
-    private Authorizer authorizer;
+    private AuthorizerProcessor authorizer;
 
     @BeforeEach
     void setUp() {
         AccountRepository accountRepository = AccountRepositoryFactory.create();
         accountRepository.save(null);
-        authorizer = new Authorizer(accountRepository);
+        authorizer = new AuthorizerProcessor(accountRepository);
     }
 
     @Test

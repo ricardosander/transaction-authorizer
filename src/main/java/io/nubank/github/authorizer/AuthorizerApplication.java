@@ -1,6 +1,5 @@
 package io.nubank.github.authorizer;
 
-import io.nubank.github.authorizer.account.AccountRepositoryFactory;
 import io.nubank.github.authorizer.account.AccountResult;
 import io.nubank.github.authorizer.account.AccountResultJsonSerializer;
 import org.codehaus.jackson.Version;
@@ -8,30 +7,19 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.module.SimpleModule;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 public class AuthorizerApplication {
 
     public static void main(String[] args) throws IOException {
 
+        Scanner input = new Scanner(System.in);
+        PrintStream output = System.out;
         ObjectMapper jsonMapper = configureJsonMapper();
 
-        Scanner input = new Scanner(System.in);
-        List<OperationRequest> requests = new ArrayList<>();
-        while (input.hasNext()) {
-            String line = input.nextLine();
-            Operation operation = jsonMapper.readValue(line, Operation.class);
-            requests.add(operation.toDomain());
-        }
-
-        List<OperationResult> results = new Authorizer(AccountRepositoryFactory.create())
-                .execute(requests);
-
-        for (OperationResult result : results) {
-            System.out.println(jsonMapper.writeValueAsString(result));
-        }
+        TerminalAuthorizerExecutor authorizer = new TerminalAuthorizerExecutor(input, output, jsonMapper);
+        authorizer.execute();
     }
 
     private static ObjectMapper configureJsonMapper() {

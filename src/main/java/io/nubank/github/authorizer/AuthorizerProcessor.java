@@ -7,11 +7,11 @@ import io.nubank.github.authorizer.transaction.TransactionCreationStrategy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class Authorizer {
+class AuthorizerProcessor {
 
     private final StrategySelector strategyFactory;
 
-    Authorizer(AccountRepository accountRepository) {
+    AuthorizerProcessor(AccountRepository accountRepository) {
         strategyFactory = new StrategySelector(
                 new AccountCreationStrategy(accountRepository),
                 new TransactionCreationStrategy(accountRepository)
