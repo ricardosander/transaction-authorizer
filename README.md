@@ -8,10 +8,9 @@
 `mvn clean package`
 `java -jar target/authorizer.java < file`
 
-### No Maven? No probleam
+### No Maven? No problem
 `./mvnw clean package`
 `java -jar target/authorizer.java < file`
-
 
 ## Docker
 
