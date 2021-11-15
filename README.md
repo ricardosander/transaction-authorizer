@@ -100,8 +100,8 @@ Houveram três pontos de atenção a performance da aplicação:
   a lista inteira para validação da regra, o que pode apresentar um problema de performance para um grande volume de 
   dados. Optou-se por manter a simplicidade da implementação mas algumas alternativas envolvem o uso de `Map` do 
   tipo `HashMap` onde os objetos `Transaction` seriam duplicados para buscas mais eficientes. Poderia-se usar como 
-  chave desse `Map` o merchant, merchant e valor ou merchant, valor e tempo (cortando os segundos) dependendo do 
-  padrão de entrada esperado.
+  chave desse `Map` o merchant, merchant e data, merchant e valor ou merchant, valor e data, dependendo do padrão de 
+  entrada esperado.
 
 ## 2. Frameworks e Bibliotecas
 
@@ -189,5 +189,3 @@ Após realizar a compilação do projeto e criação da imagem, basta rodar o co
 Onde `file` é o nome completo do arquivo com as operações a serem processadas. 
 
 Lembrando que, caso tenha dado um nome diferente de `authorizer`, você deve substituir aqui pelo nome que usou.
-
-## 4.
