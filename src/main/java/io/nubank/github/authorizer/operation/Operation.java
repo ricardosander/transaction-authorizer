@@ -1,4 +1,4 @@
-package io.nubank.github.authorizer;
+package io.nubank.github.authorizer.operation;
 
 public interface Operation {
     OperationRequest toDomain();

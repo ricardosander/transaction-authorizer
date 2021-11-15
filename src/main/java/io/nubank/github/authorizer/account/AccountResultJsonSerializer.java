@@ -1,5 +1,6 @@
 package io.nubank.github.authorizer.account;
 
+import io.nubank.github.authorizer.operation.AccountResult;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;

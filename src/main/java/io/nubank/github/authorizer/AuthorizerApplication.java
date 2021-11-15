@@ -1,7 +1,13 @@
 package io.nubank.github.authorizer;
 
-import io.nubank.github.authorizer.account.AccountResult;
+import io.nubank.github.authorizer.operation.AccountResult;
 import io.nubank.github.authorizer.account.AccountResultJsonSerializer;
+import io.nubank.github.authorizer.operation.EmptyJsonSerializer;
+import io.nubank.github.authorizer.operation.EmptyObject;
+import io.nubank.github.authorizer.operation.Operation;
+import io.nubank.github.authorizer.operation.OperationJsonDeserializer;
+import io.nubank.github.authorizer.operation.OperationResult;
+import io.nubank.github.authorizer.operation.OperationResultJsonSerializer;
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.module.SimpleModule;

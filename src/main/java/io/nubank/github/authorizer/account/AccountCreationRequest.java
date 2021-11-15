@@ -1,6 +1,6 @@
 package io.nubank.github.authorizer.account;
 
-import io.nubank.github.authorizer.OperationRequest;
+import io.nubank.github.authorizer.operation.OperationRequest;
 
 public class AccountCreationRequest implements OperationRequest {
 

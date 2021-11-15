@@ -1,4 +1,6 @@
-package io.nubank.github.authorizer.account;
+package io.nubank.github.authorizer.operation;
+
+import io.nubank.github.authorizer.account.Account;
 
 public class AccountResult {
 

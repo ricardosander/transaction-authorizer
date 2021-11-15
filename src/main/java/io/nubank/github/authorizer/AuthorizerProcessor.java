@@ -2,6 +2,9 @@ package io.nubank.github.authorizer;
 
 import io.nubank.github.authorizer.account.AccountCreationStrategy;
 import io.nubank.github.authorizer.account.AccountRepository;
+import io.nubank.github.authorizer.operation.OperationRequest;
+import io.nubank.github.authorizer.operation.OperationResult;
+import io.nubank.github.authorizer.operation.StrategySelector;
 import io.nubank.github.authorizer.transaction.TransactionCreationStrategy;
 
 import java.util.List;

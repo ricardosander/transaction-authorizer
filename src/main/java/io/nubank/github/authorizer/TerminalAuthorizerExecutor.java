@@ -1,6 +1,9 @@
 package io.nubank.github.authorizer;
 
 import io.nubank.github.authorizer.account.AccountRepositoryFactory;
+import io.nubank.github.authorizer.operation.Operation;
+import io.nubank.github.authorizer.operation.OperationRequest;
+import io.nubank.github.authorizer.operation.OperationResult;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;

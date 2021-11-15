@@ -1,4 +1,4 @@
-package io.nubank.github.authorizer;
+package io.nubank.github.authorizer.operation;
 
 import io.nubank.github.authorizer.account.AccountCreationRequest;
 import io.nubank.github.authorizer.account.AccountCreationStrategy;
@@ -15,7 +15,7 @@ public class StrategySelector {
         this.transactionCreationStrategy = transactionCreationStrategy;
     }
 
-    OperationStrategy getStrategy(OperationRequest request) {
+    public OperationStrategy getStrategy(OperationRequest request) {
 
         if (request instanceof AccountCreationRequest) {
             return accountCreationStrategy;

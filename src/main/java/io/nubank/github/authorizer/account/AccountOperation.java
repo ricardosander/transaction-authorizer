@@ -1,7 +1,7 @@
 package io.nubank.github.authorizer.account;
 
-import io.nubank.github.authorizer.Operation;
-import io.nubank.github.authorizer.OperationRequest;
+import io.nubank.github.authorizer.operation.Operation;
+import io.nubank.github.authorizer.operation.OperationRequest;
 
 public class AccountOperation implements Operation {
 

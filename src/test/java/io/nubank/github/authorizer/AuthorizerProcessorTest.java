@@ -3,6 +3,8 @@ package io.nubank.github.authorizer;
 import io.nubank.github.authorizer.account.AccountCreationRequest;
 import io.nubank.github.authorizer.account.AccountRepository;
 import io.nubank.github.authorizer.account.AccountRepositoryFactory;
+import io.nubank.github.authorizer.operation.OperationRequest;
+import io.nubank.github.authorizer.operation.OperationResult;
 import io.nubank.github.authorizer.transaction.TransactionCreationRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AuthorizerTest {
+class AuthorizerProcessorTest {
 
     private AuthorizerProcessor authorizer;
 

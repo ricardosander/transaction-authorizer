@@ -1,6 +1,6 @@
 package io.nubank.github.authorizer.transaction;
 
-import io.nubank.github.authorizer.OperationRequest;
+import io.nubank.github.authorizer.operation.OperationRequest;
 
 import java.time.LocalDateTime;
 

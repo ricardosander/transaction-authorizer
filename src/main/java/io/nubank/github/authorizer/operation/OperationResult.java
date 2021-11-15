@@ -1,6 +1,4 @@
-package io.nubank.github.authorizer;
-
-import io.nubank.github.authorizer.account.AccountResult;
+package io.nubank.github.authorizer.operation;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,11 +13,11 @@ public class OperationResult {
         this.violations = Collections.unmodifiableList(violations);
     }
 
-    AccountResult getAccount() {
+    public AccountResult getAccount() {
         return state;
     }
 
-    List<String> getViolations() {
+    public List<String> getViolations() {
         return violations;
     }
 }

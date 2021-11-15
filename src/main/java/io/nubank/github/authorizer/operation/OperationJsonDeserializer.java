@@ -1,4 +1,4 @@
-package io.nubank.github.authorizer;
+package io.nubank.github.authorizer.operation;
 
 import io.nubank.github.authorizer.account.AccountOperation;
 import io.nubank.github.authorizer.transaction.TransactionOperation;
@@ -9,7 +9,7 @@ import org.codehaus.jackson.map.JsonDeserializer;
 
 import java.io.IOException;
 
-class OperationJsonDeserializer extends JsonDeserializer<Operation> {
+public class OperationJsonDeserializer extends JsonDeserializer<Operation> {
 
     @Override
     public Operation deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
