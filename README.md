@@ -20,7 +20,7 @@ fluxo é entregue para a classe `TerminalAuthorizerExecutor`.
 leitura e escrita, com ajuda do `ObjectMapper`, que fica responsável pelas traduções de objetos em JSON e vice-versa.
 
 Note que as abstrações no uso de `Scanner` como input e `PrintStream` como output permitem que a leitura e escrita 
-possam ser facilmente substituídas por outas implementações como, por exemplo, leitura e escrita em arquivos.
+possam ser facilmente substituídas por outras implementações como, por exemplo, leitura e escrita em arquivos.
 
 Caso as linhas 23 e 24 da classe `AuthorizerApplication` fossem substituídas por
 
@@ -35,7 +35,7 @@ escrevendo em um arquivo de nome `outputFileName`. Nenhuma outra alteração ser
 ### 1.3 - Core
 
 A partir da classe `AuthorizerProcessor` temos o que podemos chamar da camada `application` ou `core`. A partir 
-dessa camada não temos mais dependências de nada externo as lógicas da aplicação ou de negócio.
+dessa camada não temos mais dependências externas, apenas lógicas da aplicação e negócio.
 
 O `AuthorizerProcessor` recebe uma dependência do tipo `AccountRepository`, a qual é uma abstração de um repositório 
 de contas, tendo como implementação a classe `AccountRepositoryImpl` que trabalha como um repositório em memória. 
@@ -82,7 +82,26 @@ Os testes unitários estão na classe `AuthorizerProcessorTest` e estão no nív
 considerar as camadas externas.
 
 Já a classe `AuthorizerApplicationTests` faz os testes "integrados", simulando o input a partir de arquivos e 
-validando o resultado contra um arquivo de output esperado, os quais se encontram na diretório `src/test/resources`. 
+validando o resultado contra um arquivo de output esperado, os quais se encontram na diretório `src/test/resources`.
+
+### 1.6 Performance
+
+Houveram três pontos de atenção a performance da aplicação:
+
+- Lista de transações: embora a lista seja referenciada por sua abstração, decidiu-se por inicializá-la como uma 
+  `LinkedList` (lista duplamenta ligada) pensado nas operações de inserções nas extremidades, que são extremamente 
+  eficientes nesse tipo de implementação. Como a maioria da leitura é feita pelas pontas, a perda de performance 
+  nesse sentido deve ser mínima. Tendo uma maior amostra de dados poderíamos fazer testes alterando a linha 18 da 
+  classe `Account`
+- Durante a verificação da regra de alta frequência num curto intervalo (método `isHighFrequencySmallInterval` da 
+  classe `Account`) dado que sabemos que as transações serão processadas em ordem cronológica, decidiu-se por 
+  otimizar a busca olhando apenas os últimos três elementos da lista de transações.
+- Durante a verificação de transações duplicadas (método `isDoubledTransaction` da classe `Account`) foi processada 
+  a lista inteira para validação da regra, o que pode apresentar um problema de performance para um grande volume de 
+  dados. Optou-se por manter a simplicidade da implementação mas algumas alternativas envolvem o uso de `Map` do 
+  tipo `HashMap` onde os objetos `Transaction` seriam duplicados para buscas mais eficientes. Poderia-se usar como 
+  chave desse `Map` o merchant, merchant e valor ou merchant, valor e tempo (cortando os segundos) dependendo do 
+  padrão de entrada esperado.
 
 ## 2. Frameworks e Bibliotecas
 
