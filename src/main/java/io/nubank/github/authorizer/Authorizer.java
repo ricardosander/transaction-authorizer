@@ -1,38 +1,26 @@
 package io.nubank.github.authorizer;
 
-import io.nubank.github.authorizer.account.AccountCreationRequest;
-import io.nubank.github.authorizer.account.AccountCreationUseCase;
+import io.nubank.github.authorizer.account.AccountCreationStrategy;
 import io.nubank.github.authorizer.account.AccountRepository;
-import io.nubank.github.authorizer.transaction.TransactionCreationRequest;
-import io.nubank.github.authorizer.transaction.TransactionCreationUseCase;
+import io.nubank.github.authorizer.transaction.TransactionCreationStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class Authorizer {
 
-    private final AccountCreationUseCase accountCreation;
-    private final TransactionCreationUseCase transactionCreation;
+    private final StrategySelector strategyFactory;
 
     Authorizer(AccountRepository accountRepository) {
-        accountCreation = new AccountCreationUseCase(accountRepository);
-        transactionCreation = new TransactionCreationUseCase(accountRepository);
+        strategyFactory = new StrategySelector(
+                new AccountCreationStrategy(accountRepository),
+                new TransactionCreationStrategy(accountRepository)
+        );
     }
 
     List<OperationResult> execute(List<OperationRequest> requests) {
-
-        List<OperationResult> results = new ArrayList<>();
-
-        requests.forEach(request -> {
-            if (request instanceof AccountCreationRequest) {
-                results.add(accountCreation.execute((AccountCreationRequest) request));
-            }
-
-            if (request instanceof TransactionCreationRequest) {
-                results.add(transactionCreation.execute((TransactionCreationRequest) request));
-            }
-        });
-
-        return results;
+        return requests.stream()
+                .map(request -> strategyFactory.getStrategy(request).execute(request))
+                .collect(Collectors.toList());
     }
 }

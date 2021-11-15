@@ -12,11 +12,7 @@ public class AccountCreationRequest implements OperationRequest {
         this.availableLimit = availableLimit;
     }
 
-    boolean isActiveCard() {
-        return activeCard;
-    }
-
-    int getAvailableLimit() {
-        return availableLimit;
+    Account toDomain() {
+        return new Account(activeCard, availableLimit);
     }
 }
