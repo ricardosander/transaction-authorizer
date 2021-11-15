@@ -2,7 +2,31 @@
 
 ## 1.
 
-## 2.
+## 2. Frameworks e Bibliotecas
+
+O projeto foi feito utilizando Java como linguagem de programação, JVM como plataforma e Maven como gerenciador de 
+dependências e automação de compilação. Nenhum framework complexo foi necessário.
+
+Porém, algumas bibliotecas foram incluídas:
+- `org.codehaus.jackson.jackson-mapper-asl`: Única biblioteca utilizada em tempo de execução da aplicação. Essa 
+  biblioteca foi utilizada para facilitar a leitura e escrita de JSON na aplicação. Utilizei ela não só pela 
+  familiaridade mas também por ser uma biblioteca amplamente utilizada quando desenvolvemos em Java ou Kotlin. É uma 
+  dependência compátivel com os módulos do Spring Framework, por exemplo.
+- `org.junit.jupiter.junit-jupiter`: o JUnit é um framework de automatização de testes amplamente utilizadno nas 
+  linguagens de programação Java e Kotlin.  É utilizado apenas na etapa de testes da aplicação.
+- `org.assertj.assertj-core`: O assertj é uma biblioteca para escrevermos "declarações" mais fluentes em testes 
+  automatizados. Enquanto com JUnit teríamos uma escrita de assert como `assertEquals(a, b)` com assertj 
+  escrevemos `assertThat(a).isEqualsTo(b)`, tornando a escrita do testes muito mais natural. É utilizado apenas na 
+  etapa de testes da aplicação.
+- `maven-compiler-plugin`: esse é um plugin utilizado pelo Maven para executador a compilação do projeto. É 
+  utilizado para a etapa de compilação da aplicação.
+- `maven-surefire-plugin`: esse plugin é utilizado para adicionar o jUnit Jupiter no ciclo de vida do Maven, ou seja,
+  é necessários para que os testes sejam rodados durante o ciclo de compilação da aplicação. É utilizado apenas para 
+  a etapa de testes da aplicação.
+- `maven-assembly-plugin`: esse plugin do Maven nos ajuda a criarmos um arquivo `jar` independente e executável. Com 
+  eles conseguimos definir a `main class` a ser executada, adicionamos as dependências dentro do pacote e renomeados 
+  esse pacote para sua versão final, chamada de `authorizer.jar`. É utilizado apenas na etapa `package` (criação de 
+  pacotes) da aplicação.
 
 ## 3. Compilação & Execução
 
