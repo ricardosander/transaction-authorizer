@@ -20,14 +20,6 @@ public class TransactionCreationRequest implements OperationRequest {
         return amount;
     }
 
-    String getMerchant() {
-        return merchant;
-    }
-
-    LocalDateTime getTime() {
-        return time;
-    }
-
     public Transaction toDomain() {
         return new Transaction(merchant, amount, time);
     }
