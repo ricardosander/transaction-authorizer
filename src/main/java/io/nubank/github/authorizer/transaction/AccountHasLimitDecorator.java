@@ -12,9 +12,13 @@ class AccountHasLimitDecorator extends TransactionCreationViolationVerifierDecor
 
     public List<String> verify(Account account, TransactionCreationRequest request) {
         List<String> violations = super.verify(account, request);
-        if (account != null && request.getAmount() > account.getAvailableLimit()) {
+        if (account != null && accountDontHaveLimit(account, request)) {
             violations.add("insufficient-limit");
         }
         return violations;
+    }
+
+    private boolean accountDontHaveLimit(Account account, TransactionCreationRequest request) {
+        return !account.hasLimit(request.getAmount());
     }
 }

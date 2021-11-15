@@ -14,7 +14,7 @@ public class Transaction {
         this.time = time;
     }
 
-    String getMerchant() {
+    private String getMerchant() {
         return merchant;
     }
 
@@ -22,7 +22,14 @@ public class Transaction {
         return amount;
     }
 
-    LocalDateTime getTime() {
+    public LocalDateTime getTime() {
         return time;
+    }
+
+    public boolean isDoubleTransaction(Transaction target) {
+        LocalDateTime limit = target.getTime().minusMinutes(2);
+        return merchant.equals(target.getMerchant())
+                && amount == target.getAmount()
+                && limit.isBefore(time);
     }
 }
