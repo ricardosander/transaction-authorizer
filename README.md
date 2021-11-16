@@ -143,7 +143,10 @@ será gerado para execução.
 
 Caso tenha o Maven 3.8.3 instalado, você pode rodar o seguinte comando, na raiz desse projeto, para compilar o projeto:
 
-`mvn clean package`
+`mvn clean package -s settings.xml`
+
+A opção `-s settings.xml` serve para utilizar as configurações de repositório do projeto (padrões) e evitar 
+conflitos com configurações que você já possa ter.
 
 #### 3.1.2 - "No Maven? No problem"
 
@@ -152,7 +155,10 @@ ainda sim é necessário ter o JDK 11+ instalado para esse método.
 
 Basta rodar o seguinte comando na raiz desse projeto: 
 
-`./mvnw clean package`
+`./mvnw clean package -s settings.xml`
+
+A opção `-s settings.xml` serve para utilizar as configurações de repositório do projeto (padrões) e evitar
+conflitos com configurações que você já possa ter.
 
 #### 3.1.3 - Running
 
@@ -161,7 +167,7 @@ Se você compilou o projeto utilizando o JDK e Maven, você terá um arquivo `au
 
 Para executar o programa, basta rodar o seguinte comando, na raiz do projeto,:
 
-`java -jar target/authorizer.java < file`
+`java -jar target/authorizer.jar < file`
 
 Onde `file` é o nome completo do arquivo com as operações a serem processadas.
 
