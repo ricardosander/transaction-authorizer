@@ -162,7 +162,7 @@ conflitos com configurações que você já possa ter.
 
 #### 3.1.3 - Running
 
-Se você compilou o projeto utilizando o JDK e Maven, você terá um arquivo `authorizer.java` dentro do diretório 
+Se você compilou o projeto utilizando o JDK e Maven, você terá um arquivo `authorizer.jar` dentro do diretório 
 `target` na raiz do projeto.  
 
 Para executar o programa, basta rodar o seguinte comando, na raiz do projeto,:
