@@ -8,6 +8,9 @@ import java.util.List;
 
 public class Account {
 
+    private static final int TRANSACTIONS_TO_HIGH_FREQUENCY = 3;
+    private static final int RULES_INTERVAL_IN_MINUTES = 2;
+
     private final boolean activeCard;
     private int availableLimit;
     private final List<Transaction> transactions;
@@ -41,17 +44,20 @@ public class Account {
     }
 
     public boolean isHighFrequencySmallInterval(Transaction target) {
-        if (this.transactions.size() < 3) {
+        if (this.transactions.size() < TRANSACTIONS_TO_HIGH_FREQUENCY) {
             return false;
         }
-        LocalDateTime limit = target.getTime().minusMinutes(2);
-        return transactions.stream().skip(transactions.size() - 3).allMatch(t -> limit.isBefore(t.getTime()));
+        LocalDateTime limit = target.getTime().minusMinutes(RULES_INTERVAL_IN_MINUTES);
+        return transactions.stream()
+                .skip(transactions.size() - TRANSACTIONS_TO_HIGH_FREQUENCY)
+                .allMatch(transaction -> limit.isBefore(transaction.getTime()));
     }
 
     public boolean isDoubledTransaction(Transaction target) {
         if (transactions.isEmpty()) {
             return false;
         }
-        return transactions.stream().anyMatch(transaction -> transaction.isDoubleTransaction(target));
+        LocalDateTime limit = target.getTime().minusMinutes(RULES_INTERVAL_IN_MINUTES);
+        return transactions.stream().anyMatch(transaction -> transaction.isDoubleTransaction(target, limit));
     }
 }

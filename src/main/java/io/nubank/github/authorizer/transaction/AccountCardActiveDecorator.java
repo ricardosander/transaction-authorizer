@@ -6,6 +6,8 @@ import java.util.List;
 
 class AccountCardActiveDecorator extends TransactionCreationViolationVerifierDecorator {
 
+    private static final String VIOLATION_NAME = "card-not-active";
+
     public AccountCardActiveDecorator(TransactionCreationViolationVerifier next) {
         super(next);
     }
@@ -13,9 +15,11 @@ class AccountCardActiveDecorator extends TransactionCreationViolationVerifierDec
     public List<String> verify(Account account, TransactionCreationRequest request) {
         List<String> violations = super.verify(account, request);
         if (account != null && !account.isActiveCard()) {
-            violations.add("card-not-active");
+            violations.add(VIOLATION_NAME);
+
         }
         return violations;
+
     }
 
 }

@@ -26,8 +26,7 @@ public class Transaction {
         return time;
     }
 
-    public boolean isDoubleTransaction(Transaction target) {
-        LocalDateTime limit = target.getTime().minusMinutes(2);
+    public boolean isDoubleTransaction(Transaction target, LocalDateTime limit) {
         return merchant.equals(target.getMerchant())
                 && amount == target.getAmount()
                 && limit.isBefore(time);

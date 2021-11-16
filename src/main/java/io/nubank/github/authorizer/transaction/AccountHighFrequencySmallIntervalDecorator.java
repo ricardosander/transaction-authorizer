@@ -6,6 +6,8 @@ import java.util.List;
 
 class AccountHighFrequencySmallIntervalDecorator extends TransactionCreationViolationVerifierDecorator {
 
+    private static final String VIOLATION_NAME = "high-frequency-small-interval";
+
     public AccountHighFrequencySmallIntervalDecorator(TransactionCreationViolationVerifier next) {
         super(next);
     }
@@ -13,7 +15,7 @@ class AccountHighFrequencySmallIntervalDecorator extends TransactionCreationViol
     public List<String> verify(Account account, TransactionCreationRequest request) {
         List<String> violations = super.verify(account, request);
         if (account != null && account.isHighFrequencySmallInterval(request.toDomain())) {
-            violations.add("high-frequency-small-interval");
+            violations.add(VIOLATION_NAME);
         }
         return violations;
     }

@@ -6,6 +6,8 @@ import java.util.List;
 
 class AccountHasLimitDecorator extends TransactionCreationViolationVerifierDecorator {
 
+    private static final String VIOLATION_NAME = "insufficient-limit";
+
     public AccountHasLimitDecorator(TransactionCreationViolationVerifier next) {
         super(next);
     }
@@ -13,7 +15,7 @@ class AccountHasLimitDecorator extends TransactionCreationViolationVerifierDecor
     public List<String> verify(Account account, TransactionCreationRequest request) {
         List<String> violations = super.verify(account, request);
         if (account != null && accountDontHaveLimit(account, request)) {
-            violations.add("insufficient-limit");
+            violations.add(VIOLATION_NAME);
         }
         return violations;
     }
